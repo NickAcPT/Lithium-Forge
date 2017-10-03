@@ -41,6 +41,8 @@ public class LithiumGUI extends GuiScreen {
 	//All controls that are centered horizontally
 	private List<UUID> centeredVert = new ArrayList<>();
 	private HashMap<UUID, GuiTextField> textBoxes = new HashMap<>();
+	private HashMap<Integer, UUID> textBoxesReverse = new HashMap<>();
+	private HashMap<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
 
 	//Button stuff
 	//We take a global count number and give a Lithium button
@@ -128,6 +130,8 @@ public class LithiumGUI extends GuiScreen {
 			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, c.getLocation().getY(), c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
 
 			textBoxes.put(c.getUUID(), txt);
+			textBoxesReverse.put(txt.getId(), c.getUUID());
+			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
 
 		}
 		if (c.getLocation().getX() == CENTERED_CONSTANT) {
@@ -152,7 +156,13 @@ public class LithiumGUI extends GuiScreen {
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		super.keyTyped(typedChar, keyCode);
 		textBoxes.values().forEach(t -> {
-			if (t.isFocused()) t.textboxKeyTyped(typedChar, keyCode);
+			if (t.isFocused()) {
+				t.textboxKeyTyped(typedChar, keyCode);
+
+				LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
+				if (lTextBox != null)
+					LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
+			}
 		});
 	}
 
