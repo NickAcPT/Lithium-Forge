@@ -51,7 +51,6 @@ public class LithiumGUI extends GuiScreen {
 	private HashMap<Integer, Integer> reverseButtonsCounter = new HashMap<>();
 
 	//Labels to be rendered!
-	//Must be used to
 	private ArrayList<LTextLabel> labelsToRender = new ArrayList<>();
 	private int globalCounter = 0;
 	private int BUTTON_HEIGHT = 20;

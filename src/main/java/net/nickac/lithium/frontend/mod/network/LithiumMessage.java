@@ -33,7 +33,8 @@ import static net.nickac.lithium.backend.other.LithiumConstants.*;
 import static net.nickac.lithium.frontend.mod.utils.NativeUtils.readUTF8String;
 
 /**
- * @author diesieben07
+ * Created by NickAc for Lithium!<br><br>
+ * Original class made by diesieben07
  */
 public class LithiumMessage implements IMessage {
 
