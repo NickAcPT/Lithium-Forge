@@ -125,7 +125,7 @@ public class LithiumGUI extends GuiScreen {
 			LTextLabel lbl = (LTextLabel) c;
 			if (!labelsToRender.contains(lbl)) labelsToRender.add(lbl);
 		} else if (c.getClass().equals(LTextBox.class)) {
-			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, c.getSize().getWidth(), c.getSize().getHeight(), c.getLocation().getY(), c.getLocation().getY());
+			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, c.getLocation().getY(), c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
 
 			textBoxes.put(c.getUUID(), txt);
 
@@ -240,6 +240,12 @@ public class LithiumGUI extends GuiScreen {
 
 	private FontRenderer getFontRenderer() {
 		return Minecraft.getMinecraft().fontRenderer;
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+		textBoxes.values().forEach(t -> t.mouseClicked(mouseX, mouseY, mouseButton));
 	}
 
 	@Override
