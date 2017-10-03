@@ -157,11 +157,12 @@ public class LithiumGUI extends GuiScreen {
 		super.keyTyped(typedChar, keyCode);
 		textBoxes.values().forEach(t -> {
 			if (t.isFocused()) {
-				t.textboxKeyTyped(typedChar, keyCode);
+				if (t.textboxKeyTyped(typedChar, keyCode)) {
 
-				LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
-				if (lTextBox != null)
-					LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
+					LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
+					if (lTextBox != null)
+						LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
+				}
 			}
 		});
 	}
