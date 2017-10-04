@@ -88,8 +88,9 @@ public class LithiumGUI extends GuiScreen {
 	/*int parentSizeW = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
 	int parentSizeH = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getHeight();
 	*/
-		if (centered)
+		if (centered) {
 			return (s / 2) - (w / 2)/* + (parentSizeW != 0 ? parentSizeW / 2 - w /2 : 0)*/;
+		}
 
 		return x;
 	}
@@ -110,7 +111,9 @@ public class LithiumGUI extends GuiScreen {
 		centeredHoriz.clear();
 		centeredVert.clear();
 
-		for (LControl c : ctrls) addControlToGUI(c);
+		for (LControl c : ctrls) {
+			addControlToGUI(c);
+		}
 	}
 
 	/**
@@ -123,8 +126,12 @@ public class LithiumGUI extends GuiScreen {
 		//Get scaled resolutin
 		ScaledResolution sr = getScaledResolution();
 		//Add the controls to the centered lists!
-		if (c.getLocation().getX() == CENTERED_CONSTANT) centeredHoriz.add(c.getUUID());
-		if (c.getLocation().getY() == CENTERED_CONSTANT) centeredVert.add(c.getUUID());
+		if (c.getLocation().getX() == CENTERED_CONSTANT) {
+			centeredHoriz.add(c.getUUID());
+		}
+		if (c.getLocation().getY() == CENTERED_CONSTANT) {
+			centeredVert.add(c.getUUID());
+		}
 
 		//Here we check if control is a panel, and if it is, check if it's centered on x or y axis.
 		boolean centerPanelX = (c.getClass().equals(LPanel.class)) && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.NONE && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.VERTICAL;
@@ -159,7 +166,9 @@ public class LithiumGUI extends GuiScreen {
 			reverseButtonsCounter.put(bb.id, globalCounter);
 		} else if (c.getClass().equals(LTextLabel.class)) {
 			LTextLabel lbl = (LTextLabel) c;
-			if (!labelsToRender.contains(lbl)) labelsToRender.add(lbl);
+			if (!labelsToRender.contains(lbl)) {
+				labelsToRender.add(lbl);
+			}
 		} else if (c.getClass().equals(LTextBox.class)) {
 			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, parentOffsetX + c.getLocation().getX(), parentOffsetY + c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
 
@@ -168,10 +177,15 @@ public class LithiumGUI extends GuiScreen {
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
 
 		}
-		if (c.getLocation().getX() == CENTERED_CONSTANT) centeredHoriz.add(c.getUUID());
-		if (c.getLocation().getY() == CENTERED_CONSTANT) centeredVert.add(c.getUUID());
-		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow)))
+		if (c.getLocation().getX() == CENTERED_CONSTANT) {
+			centeredHoriz.add(c.getUUID());
+		}
+		if (c.getLocation().getY() == CENTERED_CONSTANT) {
+			centeredVert.add(c.getUUID());
+		}
+		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {
 			baseWindow.addControl(c);
+		}
 		globalCounter++;
 	}
 
@@ -186,10 +200,13 @@ public class LithiumGUI extends GuiScreen {
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		super.keyTyped(typedChar, keyCode);
 		textBoxes.values().forEach(t -> {
-			if (t.isFocused()) if (t.textboxKeyTyped(typedChar, keyCode)) {
-				LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
-				if (lTextBox != null)
-					LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
+			if (t.isFocused()) {
+				if (t.textboxKeyTyped(typedChar, keyCode)) {
+					LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
+					if (lTextBox != null) {
+						LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
+					}
+				}
 			}
 		});
 	}
@@ -281,8 +298,9 @@ public class LithiumGUI extends GuiScreen {
 		int buttonId = reverseButtonsCounter.getOrDefault(button.id, -1);
 		//If we have a button, we send an event to the server with the UUID of the LButton instance.
 		//Later, it will invoke an event on the spigot side.
-		if (buttonId != -1)
+		if (buttonId != -1) {
 			LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID()));
+		}
 	}
 
 	/**
