@@ -45,9 +45,7 @@ public class NativeUtils {
 			b0 = buf.readByte();
 			i |= (b0 & 127) << j++ * 7;
 
-			if (j > maxSize) {
-				throw new RuntimeException("VarInt too big");
-			}
+			if (j > maxSize) throw new RuntimeException("VarInt too big");
 		}
 		while ((b0 & 128) == 128);
 

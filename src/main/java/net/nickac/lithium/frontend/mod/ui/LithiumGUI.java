@@ -1,27 +1,27 @@
 /*
- * MIT License
- *
- * Copyright (c) 2017 NickAc
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- */
+* MIT License
+*
+* Copyright (c) 2017 NickAc
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
+*/
 
 package net.nickac.lithium.frontend.mod.ui;
 
@@ -77,44 +77,66 @@ public class LithiumGUI extends GuiScreen {
 	 * Get the center location of control.<br>
 	 * Width and height are taken in account.
 	 *
-	 * @param s
-	 * @param w
-	 * @param x
+	 * @param s        - scaled size
+	 * @param w        - size
+	 * @param x        - original coordinate
 	 * @param centered Is the control centered
 	 * @return the corrdinate on the screen
 	 */
 	private int centerLoc(LControl c, int s, int w, int x, boolean centered) {
 
-		/*int parentSizeW = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
-		int parentSizeH = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getHeight();
-*/
+	/*int parentSizeW = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
+	int parentSizeH = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getHeight();
+	*/
 		if (centered)
 			return (s / 2) - (w / 2)/* + (parentSizeW != 0 ? parentSizeW / 2 - w /2 : 0)*/;
 
 		return x;
 	}
 
+	/**
+	 * Goes thru all controls and adds them to the gui
+	 *
+	 * @param ctrls The collection of Lithium controls to be added.
+	 */
 	private void allControls(Collection<LControl> ctrls) {
+		textBoxes.clear();
+		textBoxesLReverse.clear();
+		textBoxesReverse.clear();
+		reverseButtonsCounter.clear();
+		reverseLButtonsCounter.clear();
+		buttonsCounter.clear();
 		buttonList.clear();
 		centeredHoriz.clear();
 		centeredVert.clear();
 
-		for (LControl c : ctrls) {
-			addControlToGUI(c);
-		}
+		for (LControl c : ctrls) addControlToGUI(c);
 	}
 
+	/**
+	 * Adds a Lithium control to the GUI.<br>
+	 * This is the method that does the heavy lifting..
+	 *
+	 * @param c
+	 */
 	public void addControlToGUI(LControl c) {
+		//Get scaled resolutin
 		ScaledResolution sr = getScaledResolution();
+		//Add the controls to the centered lists!
 		if (c.getLocation().getX() == CENTERED_CONSTANT) centeredHoriz.add(c.getUUID());
 		if (c.getLocation().getY() == CENTERED_CONSTANT) centeredVert.add(c.getUUID());
 
+		//Here we check if control is a panel, and if it is, check if it's centered on x or y axis.
 		boolean centerPanelX = (c.getClass().equals(LPanel.class)) && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.NONE && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.VERTICAL;
 		boolean centerPanelY = (c.getClass().equals(LPanel.class)) && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.NONE && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.HORIZONTAL;
 
+		//Then, we need to get the offset of the parent
+		//This offset is the X and Y coordinated of the parent
 		int parentOffsetX = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getLeft() : 0;
 		int parentOffsetY = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getTop() : 0;
 
+		//Then we finally calculate the location of the control.
+		//Minecraft has some limitations regarding button height, so it's always equal to the
 		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredHoriz.contains(c.getUUID()) || centerPanelX);
 		int controlY = centerLoc(c, sr.getScaledHeight(), (c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight()), c.getLocation().getY(), centeredVert.contains(c.getUUID()) || centerPanelY) + parentOffsetY;
 		if (c.getClass().equals(LPanel.class)) {
@@ -146,12 +168,8 @@ public class LithiumGUI extends GuiScreen {
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
 
 		}
-		if (c.getLocation().getX() == CENTERED_CONSTANT) {
-			centeredHoriz.add(c.getUUID());
-		}
-		if (c.getLocation().getY() == CENTERED_CONSTANT) {
-			centeredVert.add(c.getUUID());
-		}
+		if (c.getLocation().getX() == CENTERED_CONSTANT) centeredHoriz.add(c.getUUID());
+		if (c.getLocation().getY() == CENTERED_CONSTANT) centeredVert.add(c.getUUID());
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow)))
 			baseWindow.addControl(c);
 		globalCounter++;
@@ -168,13 +186,10 @@ public class LithiumGUI extends GuiScreen {
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		super.keyTyped(typedChar, keyCode);
 		textBoxes.values().forEach(t -> {
-			if (t.isFocused()) {
-				if (t.textboxKeyTyped(typedChar, keyCode)) {
-
-					LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
-					if (lTextBox != null)
-						LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
-				}
+			if (t.isFocused()) if (t.textboxKeyTyped(typedChar, keyCode)) {
+				LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
+				if (lTextBox != null)
+					LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
 			}
 		});
 	}
@@ -199,16 +214,24 @@ public class LithiumGUI extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		//softRemoveControl(baseWindow);
+		//We need to clear the button list
 		buttonList.clear();
+		//Then we need to initialize the gui
 		super.initGui();
-//		baseWindow.getControls().forEach(this::softRemoveControl);
+		//Then we need to register the window
 		LithiumMod.getWindowManager().registerWindow(baseWindow);
+		//Then we set the current Lithium GUI to this.
 		LithiumMod.setCurrentLithium(this);
+		//Then we add all controls to gui
 		allControls(baseWindow.getControls());
 
 	}
 
+	/**
+	 * Removes a Lithium control from the GUI
+	 *
+	 * @param g The control that will be removed
+	 */
 	private void softRemoveControl(LControl g) {
 		if (g.getClass().equals(LButton.class)) {
 			for (GuiButton guiButton : buttonList) {
@@ -237,8 +260,11 @@ public class LithiumGUI extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
+		//We can unregister the window, because everything has an UUID, and it wouldn't make sense to reuse a window or its controls.
 		LithiumMod.getWindowManager().unregisterWindow(baseWindow);
+		//Then we need to the server that the window was closed (event)
 		LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_WINDOW_CLOSE + baseWindow.getUUID()));
+		//Then, we can "safely" set the current LithiumGUI to null.
 		LithiumMod.setCurrentLithium(null);
 	}
 
@@ -251,11 +277,21 @@ public class LithiumGUI extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
+		//Get the id of the button. It's safer to use and store the button's own id(integer) instead of the instance itself.
 		int buttonId = reverseButtonsCounter.getOrDefault(button.id, -1);
+		//If we have a button, we send an event to the server with the UUID of the LButton instance.
+		//Later, it will invoke an event on the spigot side.
 		if (buttonId != -1)
 			LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID()));
 	}
 
+	/**
+	 * Returns a new scaled resolution from Minecraft.<br>
+	 * This method exists to easier backport of the mod.<br>
+	 * Between versions, the constructor was changed and
+	 *
+	 * @return A new scaled resolution object
+	 */
 	private ScaledResolution getScaledResolution() {
 		return new ScaledResolution(Minecraft.getMinecraft());
 	}
@@ -272,17 +308,24 @@ public class LithiumGUI extends GuiScreen {
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		//Just get a scaled resolution
 		ScaledResolution sr = getScaledResolution();
 
+		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();
 
+		//Then, we render all textboxes
 		textBoxes.values().forEach(GuiTextField::drawTextBox);
 
+		//Then we render the labels
 		for (LTextLabel l : labelsToRender) {
+			//Since the labels aren't a real GUI control on forge, we must calculate the location independently.
 			int parentOffsetX = (l.getParent() instanceof LControl) ? ((LControl) l.getParent()).getLeft() : 0;
 			int parentOffsetY = (l.getParent() instanceof LControl) ? ((LControl) l.getParent()).getTop() : 0;
 			int width = getFontRenderer().getStringWidth(l.getText());
 			int height = getFontRenderer().FONT_HEIGHT;
+
+			//Now we get the color. That can be set by using setColor in LTextLabel on spigot.
 
 			String r = Integer.toHexString(l.getColor().getRed());
 			r = r.equals("0") ? "00" : r;
@@ -292,10 +335,12 @@ public class LithiumGUI extends GuiScreen {
 			String b = Integer.toHexString(l.getColor().getBlue());
 			b = b.equals("0") ? "00" : b;
 			String a = Integer.toHexString(l.getColor().getAlpha());
+
+			//Alpha is ignored on labels, but we still need to calculate it!
 			a = a.equals("0") ? "00" : a;
 			long color = Long.parseLong(a + r + g + b, 16);
-
-			drawString(Minecraft.getMinecraft().fontRenderer, l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) color);
+			//Then, we draw the string.
+			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) color);
 		}
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

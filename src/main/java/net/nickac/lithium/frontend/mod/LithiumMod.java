@@ -70,16 +70,14 @@ public class LithiumMod {
 
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
 
-		for (LControl control : cc.getControls()) {
-			if (control.getClass().equals(LContainer.class)) {
-				replaceControl(((LContainer) control), u, c);
-			} else if (control.getUUID().equals(u)) {
+		for (LControl control : cc.getControls())
+			if (control.getClass().equals(LContainer.class)) replaceControl(((LContainer) control), u, c);
+			else if (control.getUUID().equals(u)) {
 				c.setParent(null);
 				currentLithium.removeControl(control);
 				currentLithium.addControlToGUI(c);
 				return;
 			}
-		}
 	}
 
 	public static SimpleNetworkWrapper getSimpleNetworkWrapper() {

@@ -64,9 +64,7 @@ public class LithiumWindowManager {
 
 	public void registerWindow(LWindow w) {
 		windows.put(w.getUUID(), w);
-		for (LControl c : w.getControls()) {
-			registerControl(c);
-		}
+		for (LControl c : w.getControls()) registerControl(c);
 	}
 
 	public void unregisterWindow(LWindow w) {
