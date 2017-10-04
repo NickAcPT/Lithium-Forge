@@ -75,9 +75,13 @@ public class LithiumGUI extends GuiScreen {
 	 * @param centered Is the control centered
 	 * @return the corrdinate on the screen
 	 */
-	private int centerLoc(int s, int w, int x, boolean centered) {
+	private int centerLoc(LControl c, int s, int w, int x, boolean centered) {
+
+		int parentSizeW = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
+		int parentSizeH = c.getParent() == null ? 0 : c.getParent().getClass().equals(LPanel.class) ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getHeight();
+
 		if (centered)
-			return (s / 2) - (w / 2);
+			return (s / 2) - (w / 2)/* + (parentSizeW != 0 ? parentSizeW / 2 - w /2 : 0)*/;
 
 		return x;
 	}
@@ -103,8 +107,8 @@ public class LithiumGUI extends GuiScreen {
 		int parentOffsetX = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getLeft() : 0;
 		int parentOffsetY = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getTop() : 0;
 
-		int controlX = centerLoc(sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredHoriz.contains(c.getUUID()) || centerPanelX);
-		int controlY = centerLoc(sr.getScaledHeight(), (c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight()), c.getLocation().getY(), centeredVert.contains(c.getUUID()) || centerPanelY) + parentOffsetY;
+		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredHoriz.contains(c.getUUID()) || centerPanelX);
+		int controlY = centerLoc(c, sr.getScaledHeight(), (c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight()), c.getLocation().getY(), centeredVert.contains(c.getUUID()) || centerPanelY) + parentOffsetY;
 		if (c.getClass().equals(LPanel.class)) {
 			LPanel pnl = (LPanel) c;
 			boolean var1 = c.getLocation().getX() == CENTERED_CONSTANT || (pnl.getCenterOptions() != LControl.CenterOptions.NONE && pnl.getCenterOptions() != LControl.CenterOptions.VERTICAL);
@@ -127,7 +131,7 @@ public class LithiumGUI extends GuiScreen {
 			LTextLabel lbl = (LTextLabel) c;
 			if (!labelsToRender.contains(lbl)) labelsToRender.add(lbl);
 		} else if (c.getClass().equals(LTextBox.class)) {
-			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, c.getLocation().getY(), c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
+			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, parentOffsetX + c.getLocation().getX(), parentOffsetY + c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
 
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
@@ -175,12 +179,11 @@ public class LithiumGUI extends GuiScreen {
 	private GuiButton generateGuiButton(LButton b) {
 		ScaledResolution sr = getScaledResolution();
 
-
 		int parentOffsetX = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getLeft() : 0;
 		int parentOffsetY = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getTop() : 0;
 
-		int controlX = centerLoc(sr.getScaledWidth(), b.getSize().getWidth(), b.getLocation().getX() + parentOffsetX, centeredHoriz.contains(b.getUUID()));
-		int controlY = centerLoc(sr.getScaledHeight(), BUTTON_HEIGHT, b.getLocation().getY(), centeredVert.contains(b.getUUID())) + parentOffsetY;
+		int controlX = centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getLocation().getX() + parentOffsetX, centeredHoriz.contains(b.getUUID()));
+		int controlY = centerLoc(b, sr.getScaledHeight(), BUTTON_HEIGHT, b.getLocation().getY(), centeredVert.contains(b.getUUID())) + parentOffsetY;
 
 		return new GuiButton(globalCounter, controlX, controlY, b.getSize().getWidth(), BUTTON_HEIGHT, b.getText());
 
@@ -284,7 +287,7 @@ public class LithiumGUI extends GuiScreen {
 			a = a.equals("0") ? "00" : a;
 			long color = Long.parseLong(a + r + g + b, 16);
 
-			drawString(Minecraft.getMinecraft().fontRenderer, l.getText(), centerLoc(sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) color);
+			drawString(Minecraft.getMinecraft().fontRenderer, l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) color);
 		}
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
