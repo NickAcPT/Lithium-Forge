@@ -32,6 +32,12 @@ public class LithiumWindowManager {
 	private HashMap<UUID, LControl> controls = new HashMap<>();
 	private HashMap<UUID, Gui> nativeControls = new HashMap<>();
 
+	public void clear() {
+		windows.clear();
+		controls.clear();
+		nativeControls.clear();
+	}
+
 	public LWindow getWindowById(UUID uuid) {
 		return windows.getOrDefault(uuid, null);
 	}
