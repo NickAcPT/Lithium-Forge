@@ -48,20 +48,20 @@ public class LithiumGUI extends GuiScreen {
 	private List<UUID> centeredHoriz = new ArrayList<>();
 	//All controls that are centered horizontally
 	private List<UUID> centeredVert = new ArrayList<>();
-	private HashMap<UUID, GuiTextField> textBoxes = new HashMap<>();
-	private HashMap<Integer, UUID> textBoxesReverse = new HashMap<>();
-	private HashMap<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
+	private Map<UUID, GuiTextField> textBoxes = new HashMap<>();
+	private Map<Integer, UUID> textBoxesReverse = new HashMap<>();
+	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
 
 	//Button stuff
 	//We take a global count number and give a Lithium button
-	private HashMap<Integer, LButton> buttonsCounter = new HashMap<>();
+	private Map<Integer, LButton> buttonsCounter = new HashMap<>();
 	//We take an UUID (of a control) and we get the global count button
-	private HashMap<UUID, Integer> reverseLButtonsCounter = new HashMap<>();
+	private Map<UUID, Integer> reverseLButtonsCounter = new HashMap<>();
 	//We take a global count button and give a GuiButton id
-	private HashMap<Integer, Integer> reverseButtonsCounter = new HashMap<>();
+	private Map<Integer, Integer> reverseButtonsCounter = new HashMap<>();
 
 	//Labels to be rendered!
-	private ArrayList<LTextLabel> labelsToRender = new ArrayList<>();
+	private List<LTextLabel> labelsToRender = new ArrayList<>();
 	private int globalCounter = 0;
 	private int BUTTON_HEIGHT = 20;
 
