@@ -32,6 +32,8 @@ import net.nickac.lithium.backend.controls.impl.*;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRender;
+import net.nickac.lithium.frontend.mod.utils.NickHashMap;
 
 import java.io.IOException;
 import java.util.*;
@@ -51,6 +53,9 @@ public class LithiumGUI extends GuiScreen {
 	private Map<UUID, GuiTextField> textBoxes = new HashMap<>();
 	private Map<Integer, UUID> textBoxesReverse = new HashMap<>();
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
+
+	private static ProgressBarRender progressBarRender = new ProgressBarRender();
+	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
 
 	//Button stuff
 	//We take a global count number and give a Lithium button
@@ -181,6 +186,8 @@ public class LithiumGUI extends GuiScreen {
 			textBoxesReverse.put(txt.getId(), c.getUUID());
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
 
+		} else if (c.getClass().equals(LProgressBar.class)) {
+			progressBars.put(c.getUUID(), (LProgressBar) c);
 		}
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {
 			baseWindow.addControl(c);
@@ -279,6 +286,8 @@ public class LithiumGUI extends GuiScreen {
 		} else if (g.getClass().equals(LPanel.class)) {
 			LPanel p = (LPanel) g;
 			p.getControls().forEach(this::softRemoveControl);
+		} else if (g.getClass().equals(LProgressBar.class)) {
+			progressBars.remove(g.getUUID());
 		}
 	}
 
@@ -351,23 +360,11 @@ public class LithiumGUI extends GuiScreen {
 			int width = getFontRenderer().getStringWidth(l.getText());
 			int height = getFontRenderer().FONT_HEIGHT;
 
-			//Now we get the color. That can be set by using setColor in LTextLabel on spigot.
-
-			String r = Integer.toHexString(l.getColor().getRed());
-			r = r.equals("0") ? "00" : r;
-
-			String g = Integer.toHexString(l.getColor().getGreen());
-			g = g.equals("0") ? "00" : g;
-			String b = Integer.toHexString(l.getColor().getBlue());
-			b = b.equals("0") ? "00" : b;
-			String a = Integer.toHexString(l.getColor().getAlpha());
-
-			//Alpha is ignored on labels, but we still need to calculate it!
-			a = a.equals("0") ? "00" : a;
-			long color = Long.parseLong(a + r + g + b, 16);
-			//Then, we draw the string.
-			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) color);
+			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) l.getColor().getHexColor());
 		}
+
+		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
+
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
