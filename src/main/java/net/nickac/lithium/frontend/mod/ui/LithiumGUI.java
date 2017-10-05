@@ -122,6 +122,7 @@ public class LithiumGUI extends GuiScreen {
 	 *
 	 * @param c Control to be added
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public void addControlToGUI(LControl c) {
 		//Get scaled resolutin
 		ScaledResolution sr = getScaledResolution();
@@ -148,6 +149,8 @@ public class LithiumGUI extends GuiScreen {
 		int controlY = centerLoc(c, sr.getScaledHeight(), (c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight()), c.getLocation().getY(), centeredVert.contains(c.getUUID()) || centerPanelY) + parentOffsetY;
 
 
+		//The cool part!
+		//Adding the control
 		if (c.getClass().equals(LPanel.class)) {
 			LPanel pnl = (LPanel) c;
 			boolean var1 = c.getLocation().getX() == CENTERED_CONSTANT || (pnl.getCenterOptions() != LControl.CenterOptions.NONE && pnl.getCenterOptions() != LControl.CenterOptions.VERTICAL);
@@ -173,7 +176,7 @@ public class LithiumGUI extends GuiScreen {
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
 			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, parentOffsetX + c.getLocation().getX(), parentOffsetY + c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
-
+			txt.setText(c.getText());
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
