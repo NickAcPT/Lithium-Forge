@@ -250,7 +250,16 @@ public class LithiumGUI extends GuiScreen {
 	 * @param g The control that will be removed
 	 */
 	private void softRemoveControl(LControl g) {
-		if (g.getClass().equals(LButton.class)) {
+		if (g.getClass().equals(LTextBox.class)) {
+			for (GuiTextField gg : textBoxes.values()) {
+				UUID txtUUID = textBoxesReverse.getOrDefault(gg.getId(), null);
+				if (txtUUID != null && g.getUUID().equals(txtUUID)) {
+					textBoxesReverse.remove(gg.getId());
+					textBoxesLReverse.remove(txtUUID);
+					textBoxes.remove(txtUUID);
+				}
+			}
+		} else if (g.getClass().equals(LButton.class)) {
 			for (GuiButton guiButton : buttonList) {
 				if (guiButton.id == reverseLButtonsCounter.get(g.getUUID())) {
 					Integer id = reverseButtonsCounter.get(guiButton.id);
