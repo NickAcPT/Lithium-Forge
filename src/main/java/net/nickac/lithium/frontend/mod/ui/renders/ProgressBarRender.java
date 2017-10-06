@@ -48,7 +48,7 @@ public class ProgressBarRender implements ILithiumControlRenderer<LProgressBar, 
 		int startX = control.getLeft() + 2;
 		int endX = control.getRight() - 2;
 
-		Gui.drawRect(startX, control.getTop() + 2, ConvertRange(startX, endX, control.getMinValue(), control.getMaxValue(), control.getProgress()), control.getBottom() - 2, (int) control.getProgressColor().getHexColor());
+		//Gui.drawRect(startX, control.getTop() + 2, ConvertRange(startX, endX, control.getMinValue(), control.getMaxValue(), control.getProgress()), control.getBottom() - 2, (int) control.getProgressColor().getHexColor());
 
 	}
 }

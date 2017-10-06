@@ -1,27 +1,27 @@
 /*
-* MIT License
-*
-* Copyright (c) 2017 NickAc
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*
-*/
+ * MIT License
+ *
+ * Copyright (c) 2017 NickAc
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 
 package net.nickac.lithium.frontend.mod.ui;
 
@@ -30,7 +30,6 @@ import net.minecraft.client.gui.*;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
 import net.nickac.lithium.backend.other.objects.Color;
-import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRender;
@@ -44,14 +43,11 @@ import static net.nickac.lithium.backend.other.LithiumConstants.*;
 /**
  * Created by NickAc for Lithium!
  */
-public class LithiumGUI extends GuiScreen {
+public class NewLithiumGUI extends GuiScreen {
 	private static ProgressBarRender progressBarRender = new ProgressBarRender();
 	//The base window
 	private LWindow baseWindow;
-	//All controls that are centered horizontally
-	private List<UUID> centeredHoriz = new ArrayList<>();
-	//All controls that are centered horizontally
-	private List<UUID> centeredVert = new ArrayList<>();
+
 	private Map<UUID, GuiTextField> textBoxes = new HashMap<>();
 	private Map<Integer, UUID> textBoxesReverse = new HashMap<>();
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
@@ -70,7 +66,7 @@ public class LithiumGUI extends GuiScreen {
 	private int globalCounter = 0;
 	private int BUTTON_HEIGHT = 20;
 
-	public LithiumGUI(LWindow base) {
+	public NewLithiumGUI(LWindow base) {
 		this.baseWindow = base;
 	}
 
@@ -106,16 +102,6 @@ public class LithiumGUI extends GuiScreen {
 	 * @param ctrls The collection of Lithium controls to be added.
 	 */
 	private void allControls(Collection<LControl> ctrls) {
-		/*textBoxes.clear();
-		textBoxesLReverse.clear();
-		textBoxesReverse.clear();
-		reverseButtonsCounter.clear();
-		reverseLButtonsCounter.clear();
-		buttonsCounter.clear();
-		buttonList.clear();*/
-		centeredHoriz.clear();
-		centeredVert.clear();
-
 		for (LControl c : ctrls) {
 			addControlToGUI(c);
 		}
@@ -126,23 +112,15 @@ public class LithiumGUI extends GuiScreen {
 	 * This is the method that does the heavy lifting..
 	 *
 	 * @param c Control to be added
+	 * @SuppressWarnings("ConstantConditions")
 	 */
-	@SuppressWarnings("ConstantConditions")
 	public void addControlToGUI(LControl c) {
 		//Get scaled resolutin
 		ScaledResolution sr = getScaledResolution();
 
 		//Here we check if control is a panel, and if it is, check if it's centered on x or y axis.
-		boolean centerPanelX = (c.getClass().equals(LPanel.class)) && c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
-		boolean centerPanelY = (c.getClass().equals(LPanel.class)) && c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
-
-		//Add the controls to the centered lists!
-		if (c.getLocation().getX() == CENTERED_CONSTANT || centerPanelX) {
-			centeredHoriz.add(c.getUUID());
-		}
-		if (c.getLocation().getY() == CENTERED_CONSTANT || centerPanelY) {
-			centeredVert.add(c.getUUID());
-		}
+		boolean centeredX = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
+		boolean centeredY = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
 
 
 		//Then, we need to get the offset of the parent
@@ -152,15 +130,17 @@ public class LithiumGUI extends GuiScreen {
 
 		//Then we finally calculate the location of the control.
 		//Minecraft has some limitations regarding button height, so it's always equal to the constant
-		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredHoriz.contains(c.getUUID()) || centerPanelX);
-		int controlY = centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getLocation().getY() + parentOffsetY, centeredVert.contains(c.getUUID()) || centerPanelY);
+		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredX);
+		int controlY = centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getLocation().getY() + parentOffsetY, centeredY);
 
+		if (centeredX || centeredY) {
+			//c.setLocation(new Point(controlX, controlY));
+		}
 
 		//The cool part!
 		//Adding the control
 		if (c.getClass().equals(LPanel.class)) {
 			LPanel pnl = (LPanel) c;
-			c.setLocation(new Point(controlX, controlY));
 			for (LControl lControl : pnl.getControls()) {
 				lControl.setParent(pnl);
 				addControlToGUI(lControl);
@@ -186,7 +166,6 @@ public class LithiumGUI extends GuiScreen {
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
 
 		} else if (c.getClass().equals(LProgressBar.class)) {
-			c.setLocation(new Point(controlX, controlY));
 			progressBars.put(c.getUUID(), (LProgressBar) c);
 		}
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {
@@ -217,6 +196,14 @@ public class LithiumGUI extends GuiScreen {
 		});
 	}
 
+	private boolean isCenteredX(LControl c) {
+		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
+	}
+
+	private boolean isCenteredY(LControl c) {
+		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
+	}
+
 	public void removeControl(LControl g) {
 		baseWindow.removeControl(g);
 		softRemoveControl(g);
@@ -228,8 +215,8 @@ public class LithiumGUI extends GuiScreen {
 		int parentOffsetX = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getLeft() : 0;
 		int parentOffsetY = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getTop() : 0;
 
-		int controlX = centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getLocation().getX() + parentOffsetX, centeredHoriz.contains(b.getUUID()));
-		int controlY = centerLoc(b, sr.getScaledHeight(), BUTTON_HEIGHT, b.getLocation().getY(), centeredVert.contains(b.getUUID())) + parentOffsetY;
+		int controlX = centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getLocation().getX() + parentOffsetX, isCenteredX(b));
+		int controlY = centerLoc(b, sr.getScaledHeight(), BUTTON_HEIGHT, b.getLocation().getY(), isCenteredY(b)) + parentOffsetY;
 
 		return new GuiButton(globalCounter, controlX, controlY, b.getSize().getWidth(), BUTTON_HEIGHT, b.getText());
 
@@ -244,7 +231,7 @@ public class LithiumGUI extends GuiScreen {
 		//Then we need to register the window
 		LithiumMod.getWindowManager().registerWindow(baseWindow);
 		//Then we set the current Lithium GUI to this.
-		////LithiumMod.setCurrentLithium(this);
+		LithiumMod.setCurrentLithium(this);
 		//Then we add all controls to gui
 		allControls(baseWindow.getControls());
 
@@ -369,7 +356,7 @@ public class LithiumGUI extends GuiScreen {
 			int width = getFontRenderer().getStringWidth(l.getText());
 			int height = getFontRenderer().FONT_HEIGHT;
 
-			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) l.getColor().getHexColor());
+			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, isCenteredX(l)), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), isCenteredY(l)) + parentOffsetY, (int) l.getColor().getHexColor());
 		}
 
 		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
