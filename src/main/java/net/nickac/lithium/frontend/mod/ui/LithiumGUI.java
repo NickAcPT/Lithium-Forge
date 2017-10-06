@@ -181,12 +181,13 @@ public class LithiumGUI extends GuiScreen {
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
 			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, parentOffsetX + c.getLocation().getX(), parentOffsetY + c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
-			txt.setText(c.getText());
+			txt.setText(c.getText() != null ? c.getText() : "");
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
 
 		} else if (c.getClass().equals(LProgressBar.class)) {
+			c.setLocation(new Point(controlX, controlY));
 			progressBars.put(c.getUUID(), (LProgressBar) c);
 		}
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {
