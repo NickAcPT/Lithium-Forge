@@ -145,11 +145,12 @@ public class LithiumGUI extends GuiScreen {
 
 		//Then, we need to get the offset of the parent
 		//This offset is the X and Y coordinated of the parent
-		int parentOffsetY = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getLocation().getY() : 0;
+		int parentOffsetX = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getLeft() : 0;
+		int parentOffsetY = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getTop() : 0;
 
 		//Then we finally calculate the location of the control.
 		//Minecraft has some limitations regarding button height, so it's always equal to the
-		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLeft(), centeredHoriz.contains(c.getUUID()) || centerPanelX);
+		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredHoriz.contains(c.getUUID()) || centerPanelX);
 		int controlY = centerLoc(c, sr.getScaledHeight(), (c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight()), c.getLocation().getY(), centeredVert.contains(c.getUUID()) || centerPanelY) + parentOffsetY;
 
 
@@ -179,8 +180,8 @@ public class LithiumGUI extends GuiScreen {
 				labelsToRender.add(lbl);
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
-			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, c.getLeft(), parentOffsetY + c.getTop(), c.getSize().getWidth(), c.getSize().getHeight());
-			txt.setText(c.getText() != null ? c.getText() : "");
+			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, parentOffsetX + c.getLocation().getX(), parentOffsetY + c.getLocation().getY(), c.getSize().getWidth(), c.getSize().getHeight());
+			txt.setText(c.getText());
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
 			textBoxesLReverse.put(c.getUUID(), (LTextBox) c);
@@ -224,9 +225,10 @@ public class LithiumGUI extends GuiScreen {
 	private GuiButton generateGuiButton(LButton b) {
 		ScaledResolution sr = getScaledResolution();
 
-		int parentOffsetY = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getLocation().getY() : 0;
+		int parentOffsetX = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getLeft() : 0;
+		int parentOffsetY = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getTop() : 0;
 
-		int controlX = centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getTop(), centeredHoriz.contains(b.getUUID()));
+		int controlX = centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getLocation().getX() + parentOffsetX, centeredHoriz.contains(b.getUUID()));
 		int controlY = centerLoc(b, sr.getScaledHeight(), BUTTON_HEIGHT, b.getLocation().getY(), centeredVert.contains(b.getUUID())) + parentOffsetY;
 
 		return new GuiButton(globalCounter, controlX, controlY, b.getSize().getWidth(), BUTTON_HEIGHT, b.getText());
@@ -353,11 +355,12 @@ public class LithiumGUI extends GuiScreen {
 		//Then we render the labels
 		for (LTextLabel l : labelsToRender) {
 			//Since the labels aren't a real GUI control on forge, we must calculate the location independently.
-			int parentOffsetY = (l.getParent() instanceof LControl) ? ((LControl) l.getParent()).getLocation().getY() : 0;
+			int parentOffsetX = (l.getParent() instanceof LControl) ? ((LControl) l.getParent()).getLeft() : 0;
+			int parentOffsetY = (l.getParent() instanceof LControl) ? ((LControl) l.getParent()).getTop() : 0;
 			int width = getFontRenderer().getStringWidth(l.getText());
 			int height = getFontRenderer().FONT_HEIGHT;
 
-			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLeft(), centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) l.getColor().getHexColor());
+			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLocation().getX() + parentOffsetX, centeredHoriz.contains(l.getUUID())), centerLoc(l, sr.getScaledWidth(), height, l.getLocation().getY(), centeredVert.contains(l.getUUID())) + parentOffsetY, (int) l.getColor().getHexColor());
 		}
 
 		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
