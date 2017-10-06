@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
+import net.nickac.lithium.backend.other.objects.Color;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
@@ -44,6 +45,7 @@ import static net.nickac.lithium.backend.other.LithiumConstants.*;
  * Created by NickAc for Lithium!
  */
 public class LithiumGUI extends GuiScreen {
+	private static ProgressBarRender progressBarRender = new ProgressBarRender();
 	//The base window
 	private LWindow baseWindow;
 	//All controls that are centered horizontally
@@ -53,8 +55,6 @@ public class LithiumGUI extends GuiScreen {
 	private Map<UUID, GuiTextField> textBoxes = new HashMap<>();
 	private Map<Integer, UUID> textBoxesReverse = new HashMap<>();
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
-
-	private static ProgressBarRender progressBarRender = new ProgressBarRender();
 	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
 
 	//Button stuff
@@ -106,13 +106,13 @@ public class LithiumGUI extends GuiScreen {
 	 * @param ctrls The collection of Lithium controls to be added.
 	 */
 	private void allControls(Collection<LControl> ctrls) {
-		textBoxes.clear();
+		/*textBoxes.clear();
 		textBoxesLReverse.clear();
 		textBoxesReverse.clear();
 		reverseButtonsCounter.clear();
 		reverseLButtonsCounter.clear();
 		buttonsCounter.clear();
-		buttonList.clear();
+		buttonList.clear();*/
 		centeredHoriz.clear();
 		centeredVert.clear();
 
@@ -131,17 +131,19 @@ public class LithiumGUI extends GuiScreen {
 	public void addControlToGUI(LControl c) {
 		//Get scaled resolutin
 		ScaledResolution sr = getScaledResolution();
-		//Add the controls to the centered lists!
-		if (c.getLocation().getX() == CENTERED_CONSTANT) {
-			centeredHoriz.add(c.getUUID());
-		}
-		if (c.getLocation().getY() == CENTERED_CONSTANT) {
-			centeredVert.add(c.getUUID());
-		}
 
 		//Here we check if control is a panel, and if it is, check if it's centered on x or y axis.
 		boolean centerPanelX = (c.getClass().equals(LPanel.class)) && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.NONE && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.VERTICAL;
 		boolean centerPanelY = (c.getClass().equals(LPanel.class)) && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.NONE && ((LPanel) c).getCenterOptions() != LControl.CenterOptions.HORIZONTAL;
+
+		//Add the controls to the centered lists!
+		if (c.getLocation().getX() == CENTERED_CONSTANT || centerPanelX) {
+			centeredHoriz.add(c.getUUID());
+		}
+		if (c.getLocation().getY() == CENTERED_CONSTANT || centerPanelY) {
+			centeredVert.add(c.getUUID());
+		}
+
 
 		//Then, we need to get the offset of the parent
 		//This offset is the X and Y coordinated of the parent
@@ -149,9 +151,9 @@ public class LithiumGUI extends GuiScreen {
 		int parentOffsetY = (c.getParent() instanceof LControl) ? ((LControl) c.getParent()).getTop() : 0;
 
 		//Then we finally calculate the location of the control.
-		//Minecraft has some limitations regarding button height, so it's always equal to the
+		//Minecraft has some limitations regarding button height, so it's always equal to the constant
 		int controlX = centerLoc(c, sr.getScaledWidth(), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLocation().getX() + parentOffsetX, centeredHoriz.contains(c.getUUID()) || centerPanelX);
-		int controlY = centerLoc(c, sr.getScaledHeight(), (c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight()), c.getLocation().getY(), centeredVert.contains(c.getUUID()) || centerPanelY) + parentOffsetY;
+		int controlY = centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getLocation().getY() + parentOffsetY, centeredVert.contains(c.getUUID()) || centerPanelY);
 
 
 		//The cool part!
@@ -350,8 +352,17 @@ public class LithiumGUI extends GuiScreen {
 		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();
 
+		for (Object lControl : baseWindow.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
+			LPanel p = (LPanel) lControl;
+			drawRect(p.getLeft(), p.getTop(), p.getLeft() + p.getTotalWidth(), p.getTop() + p.getTotalHeight(), (int) Color.WHITE.getHexColor());
+			for (Object l2 : p.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
+				LPanel p2 = (LPanel) l2;
+				drawRect(p2.getLeft(), p2.getTop(), p2.getLeft() + p2.getTotalWidth(), p2.getTop() + p2.getTotalHeight(), (int) Color.GRAY.getHexColor());
+			}
+		}
 		//Then, we render all textboxes
 		textBoxes.values().forEach(GuiTextField::drawTextBox);
+
 
 		//Then we render the labels
 		for (LTextLabel l : labelsToRender) {
