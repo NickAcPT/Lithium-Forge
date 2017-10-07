@@ -135,6 +135,8 @@ public class NewLithiumGUI extends GuiScreen {
 		return new Point(newX, newY);
 	}
 
+	Point addOffset = Point.EMPTY;
+
 	/**
 	 * Adds a Lithium control to the GUI.<br>
 	 * This is the method that does the heavy lifting..
@@ -154,8 +156,8 @@ public class NewLithiumGUI extends GuiScreen {
 		//Then we finally calculate the location of the control.
 		//Minecraft has some limitations regarding button height, so it's always equal to the constant
 		Point newLoc = centerControl(c);
-		int controlX = newLoc.getX();/*centerLoc(c, c.getParent() instanceof LWindow ? sr.getScaledWidth() : (c.getParent() instanceof LControl ? ((LControl) c.getParent()).getSize().getWidth() : sr.getScaledWidth()), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLeft(), centeredX, true);*/
-		int controlY = newLoc.getY();/*centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getTop(), centeredY, false);*/
+		int controlX = newLoc.getX() + addOffset.getX();/*centerLoc(c, c.getParent() instanceof LWindow ? sr.getScaledWidth() : (c.getParent() instanceof LControl ? ((LControl) c.getParent()).getSize().getWidth() : sr.getScaledWidth()), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLeft(), centeredX, true);*/
+		int controlY = newLoc.getY() + addOffset.getY();/*centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getTop(), centeredY, false);*/
 
 		if (centeredX || centeredY) {
 			//c.setLocation(new Point(controlX, controlY));
@@ -165,13 +167,15 @@ public class NewLithiumGUI extends GuiScreen {
 		//Adding the control
 		if (c.getClass().equals(LPanel.class)) {
 			LPanel pnl = (LPanel) c;
-			Point original = c.getLocation();
+			//Point original = c.getLocation();
 			if (centeredX || centeredY) {
 				//c.setLocation(new Point(controlX, controlY));
 			}
 			//c.setLocation(new Point(controlX, controlY));
 			for (LControl lControl : pnl.getControls()) {
 				//lControl.setParent(pnl);
+				addOffset = new Point(controlX, controlY);
+				//lControl.setLocation(new Point(lControl.getLocation().getX() + controlX / 2, lControl.getLocation().getY() + controlY / 2));
 				addControlToGUI(lControl);
 			}
 			//pnl.setLocation(original);
