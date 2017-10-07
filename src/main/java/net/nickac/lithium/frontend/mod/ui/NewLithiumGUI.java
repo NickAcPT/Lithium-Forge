@@ -29,7 +29,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
-import net.nickac.lithium.backend.other.objects.Color;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
@@ -117,10 +116,10 @@ public class NewLithiumGUI extends GuiScreen {
 		int parentHeight = sr.getScaledHeight();
 
 		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? c.getLocation() : Point.EMPTY;
-		if ((c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow)) {
+		/*if ((c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow)) {
 			parentWidth = c.getParent() instanceof LPanel ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
 			parentHeight = c.getParent() instanceof LPanel ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getWidth();
-		}
+		}*/
 		int newX = parentLoc.getX() + c.getLocation().getX();
 		int newY = parentLoc.getY() + c.getLocation().getY();
 
@@ -166,11 +165,16 @@ public class NewLithiumGUI extends GuiScreen {
 		//Adding the control
 		if (c.getClass().equals(LPanel.class)) {
 			LPanel pnl = (LPanel) c;
+			Point original = c.getLocation();
+			if (centeredX || centeredY) {
+				//c.setLocation(new Point(controlX, controlY));
+			}
 			//c.setLocation(new Point(controlX, controlY));
 			for (LControl lControl : pnl.getControls()) {
 				//lControl.setParent(pnl);
 				addControlToGUI(lControl);
 			}
+			//pnl.setLocation(original);
 		} else if (c.getClass().equals(LButton.class)) {
 			LButton b = (LButton) c;
 			GuiButton bb = generateGuiButton(b);
@@ -361,7 +365,7 @@ public class NewLithiumGUI extends GuiScreen {
 
 		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();
-
+/*
 		for (Object lControl : baseWindow.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
 			LPanel p = (LPanel) lControl;
 			drawRect(p.getLeft(), p.getTop(), p.getLeft() + p.getTotalWidth(), p.getTop() + p.getTotalHeight(), (int) Color.WHITE.getHexColor());
@@ -369,7 +373,7 @@ public class NewLithiumGUI extends GuiScreen {
 				LPanel p2 = (LPanel) l2;
 				drawRect(p2.getLeft(), p2.getTop(), p2.getLeft() + p2.getTotalWidth(), p2.getTop() + p2.getTotalHeight(), (int) Color.GRAY.getHexColor());
 			}
-		}
+		}*/
 		//Then, we render all textboxes
 		textBoxes.values().forEach(GuiTextField::drawTextBox);
 
