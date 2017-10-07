@@ -266,6 +266,12 @@ public class NewLithiumGUI extends GuiScreen {
 				if (txtUUID != null && g.getUUID().equals(txtUUID)) {
 					textBoxesReverse.remove(gg.getId());
 					textBoxesLReverse.remove(txtUUID);
+
+					//We should take any important data from the GUI control and move it to the LControl instance.
+					GuiTextField gui = textBoxes.getOrDefault(txtUUID, null);
+					if (gui != null)
+						g.setText(gui.getText());
+
 					textBoxes.remove(txtUUID);
 				}
 			}
@@ -291,6 +297,18 @@ public class NewLithiumGUI extends GuiScreen {
 			LPanel p = (LPanel) g;
 			p.getControls().forEach(this::softRemoveControl);
 		} else if (g.getClass().equals(LProgressBar.class)) {
+			LProgressBar gg = (LProgressBar) g;
+			LProgressBar gui = progressBars.getOrDefault(g.getUUID(), null);
+			if (gui != null) {
+				//We should take any important data from the GUI control and move it to the LControl instance.
+				gg.setProgress(gui.getProgress());
+				gg.setMaxValue(gui.getMaxValue());
+				gg.setMinValue(gui.getMinValue());
+				gg.setBorderColor(gui.getBorderColor());
+				gg.setInsideColor(gui.getInsideColor());
+				gg.setProgressColor(gui.getProgressColor());
+			}
+			//gg.setProgress();
 			progressBars.remove(g.getUUID());
 		}
 	}
