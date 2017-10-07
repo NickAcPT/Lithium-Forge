@@ -108,14 +108,15 @@ public class NewLithiumGUI extends GuiScreen {
 	}
 
 	private Point centerControl(LControl c) {
+		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? centerControl((LControl) c.getParent()) : Point.EMPTY;
+
 		if (c.getCentered() == LControl.CenterOptions.NONE) {
-			return new Point(c.getLeft(), c.getTop());
+			return new Point(parentLoc.getX() + c.getLeft(), parentLoc.getY() + c.getTop());
 		}
 		ScaledResolution sr = getScaledResolution();
 		int parentWidth = sr.getScaledWidth();
 		int parentHeight = sr.getScaledHeight();
 
-		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? c.getLocation() : Point.EMPTY;
 		/*if ((c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow)) {
 			parentWidth = c.getParent() instanceof LPanel ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
 			parentHeight = c.getParent() instanceof LPanel ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getWidth();
@@ -156,8 +157,8 @@ public class NewLithiumGUI extends GuiScreen {
 		//Then we finally calculate the location of the control.
 		//Minecraft has some limitations regarding button height, so it's always equal to the constant
 		Point newLoc = centerControl(c);
-		int controlX = newLoc.getX() + addOffset.getX();/*centerLoc(c, c.getParent() instanceof LWindow ? sr.getScaledWidth() : (c.getParent() instanceof LControl ? ((LControl) c.getParent()).getSize().getWidth() : sr.getScaledWidth()), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLeft(), centeredX, true);*/
-		int controlY = newLoc.getY() + addOffset.getY();/*centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getTop(), centeredY, false);*/
+		int controlX = newLoc.getX();/*centerLoc(c, c.getParent() instanceof LWindow ? sr.getScaledWidth() : (c.getParent() instanceof LControl ? ((LControl) c.getParent()).getSize().getWidth() : sr.getScaledWidth()), c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth(), c.getLeft(), centeredX, true);*/
+		int controlY = newLoc.getY();/*centerLoc(c, sr.getScaledHeight(), ((c.getClass().equals(LButton.class)) ? BUTTON_HEIGHT : (c.getClass().equals(LPanel.class) ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight())), c.getTop(), centeredY, false);*/
 
 		if (centeredX || centeredY) {
 			//c.setLocation(new Point(controlX, controlY));
@@ -167,18 +168,12 @@ public class NewLithiumGUI extends GuiScreen {
 		//Adding the control
 		if (c.getClass().equals(LPanel.class)) {
 			LPanel pnl = (LPanel) c;
-			//Point original = c.getLocation();
-			if (centeredX || centeredY) {
-				//c.setLocation(new Point(controlX, controlY));
-			}
-			//c.setLocation(new Point(controlX, controlY));
+			/*Point original = c.getLocation();
+			pnl.setLocation(new Point(controlX, controlY));*/
 			for (LControl lControl : pnl.getControls()) {
-				//lControl.setParent(pnl);
-				addOffset = new Point(controlX, controlY);
-				//lControl.setLocation(new Point(lControl.getLocation().getX() + controlX / 2, lControl.getLocation().getY() + controlY / 2));
 				addControlToGUI(lControl);
 			}
-			//pnl.setLocation(original);
+//			pnl.setLocation(original);
 		} else if (c.getClass().equals(LButton.class)) {
 			LButton b = (LButton) c;
 			GuiButton bb = generateGuiButton(b);
@@ -193,7 +188,7 @@ public class NewLithiumGUI extends GuiScreen {
 				labelsToRender.add(lbl);
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
-			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, c.getLeft(), c.getTop(), c.getSize().getWidth(), c.getSize().getHeight());
+			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, controlX, c.getTop(), c.getSize().getWidth(), c.getSize().getHeight());
 			txt.setText(c.getText() != null ? c.getText() : "");
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
@@ -259,7 +254,8 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	public void initGui() {
 		//We need to clear the button list
-		buttonList.clear();
+		//buttonList.clear();
+		baseWindow.getControls().forEach(this::softRemoveControl);
 		//Then we need to initialize the gui
 		super.initGui();
 		//Then we need to register the window
