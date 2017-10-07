@@ -28,7 +28,9 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LProgressBar;
+import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
+import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 
 /**
  * Created by NickAc for Lithium!
@@ -39,16 +41,22 @@ public class ProgressBarRender implements ILithiumControlRenderer<LProgressBar, 
 		return (int) (newStart + ((value - originalStart) * scale));
 	}
 
-
 	@Override
 	public void renderLithiumControl(LProgressBar control, GuiScreen gui) {
-		Gui.drawRect(control.getLeft(), control.getTop(), control.getRight(), control.getBottom(), (int) control.getBorderColor().getHexColor());
-		Gui.drawRect(control.getLeft() + 1, control.getTop() + 1, control.getRight() - 1, control.getBottom() - 1, (int) control.getInsideColor().getHexColor());
+		Point loc = NewLithiumGUI.centerControl(control);
 
-		int startX = control.getLeft() + 2;
-		int endX = control.getRight() - 2;
+		int left = loc.getX();
+		int top = loc.getY();
+		int right = left + control.getSize().getWidth();
+		int bottom = top + control.getSize().getHeight();
 
-		Gui.drawRect(startX, control.getTop() + 2, ConvertRange(startX, endX, control.getMinValue(), control.getMaxValue(), control.getProgress()), control.getBottom() - 2, (int) control.getProgressColor().getHexColor());
+		Gui.drawRect(left, top, right, bottom, (int) control.getBorderColor().getHexColor());
+		Gui.drawRect(left + 1, top + 1, right - 1, bottom - 1, (int) control.getInsideColor().getHexColor());
+
+		int startX = left + 2;
+		int endX = right - 2;
+
+		Gui.drawRect(startX, top + 2, ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getProgress()), bottom - 2, (int) control.getProgressColor().getHexColor());
 
 	}
 }

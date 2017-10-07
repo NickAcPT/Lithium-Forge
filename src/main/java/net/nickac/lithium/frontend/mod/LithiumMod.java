@@ -36,7 +36,7 @@ import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.frontend.mod.events.NetworkEventHandler;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
-import net.nickac.lithium.frontend.mod.ui.LithiumGUI;
+import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.LithiumWindowManager;
 
 import java.util.UUID;
@@ -49,14 +49,14 @@ public class LithiumMod {
 	public static final String VERSION = "0.2.1-BETA";
 
 	private static LithiumWindowManager windowManager = new LithiumWindowManager();
-	private static LithiumGUI currentLithium;
+	private static NewLithiumGUI currentLithium;
 	private static SimpleNetworkWrapper network;
 
-	public static LithiumGUI getCurrentLithium() {
+	public static NewLithiumGUI getCurrentLithium() {
 		return currentLithium;
 	}
 
-	public static void setCurrentLithium(LithiumGUI currentLithium) {
+	public static void setCurrentLithium(NewLithiumGUI currentLithium) {
 		LithiumMod.currentLithium = currentLithium;
 	}
 
@@ -71,10 +71,10 @@ public class LithiumMod {
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
 
 		for (LControl control : cc.getControls()) {
-			if (control.getClass().equals(LContainer.class)) {
+			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
 			} else if (control.getUUID().equals(u)) {
-				c.setParent(null);
+				//c.setParent(null);
 				currentLithium.removeControl(control);
 				currentLithium.addControlToGUI(c);
 				return;

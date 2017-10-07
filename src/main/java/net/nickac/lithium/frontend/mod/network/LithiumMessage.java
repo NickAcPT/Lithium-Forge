@@ -35,7 +35,7 @@ import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LWindow;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
-import net.nickac.lithium.frontend.mod.ui.LithiumGUI;
+import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 
 import static net.nickac.lithium.backend.other.LithiumConstants.*;
 import static net.nickac.lithium.frontend.mod.utils.NativeUtils.readUTF8String;
@@ -88,14 +88,14 @@ public class LithiumMessage implements IMessage {
 				if (receivedWindow != null) {
 					LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_WINDOW_OPEN + receivedWindow.getUUID()));
 					Minecraft.getMinecraft().addScheduledTask(() -> {
-						LithiumGUI gui = new LithiumGUI(receivedWindow);
+						NewLithiumGUI gui = new NewLithiumGUI(receivedWindow);
 						Minecraft.getMinecraft().displayGuiScreen(gui);
 					});
 
 				}
 			} else if (receivedMessage.startsWith(LITHIUM_CONTROL_CHANGED)) {
 				String c = receivedMessage.substring(LITHIUM_CONTROL_CHANGED.length());
-				LControl newC = SerializationUtils.stringToObject(c, LWindow.class);
+				LControl newC = SerializationUtils.stringToObject(c, LControl.class);
 				if (LithiumMod.getCurrentLithium() != null && newC != null) {
 					LithiumMod.replaceControl(LithiumMod.getCurrentLithium().getBaseWindow(), newC.getUUID(), newC);
 				}
