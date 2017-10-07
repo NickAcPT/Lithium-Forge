@@ -95,7 +95,7 @@ public class LithiumMessage implements IMessage {
 				}
 			} else if (receivedMessage.startsWith(LITHIUM_CONTROL_CHANGED)) {
 				String c = receivedMessage.substring(LITHIUM_CONTROL_CHANGED.length());
-				LControl newC = SerializationUtils.stringToObject(c, LWindow.class);
+				LControl newC = SerializationUtils.stringToObject(c, LControl.class);
 				if (LithiumMod.getCurrentLithium() != null && newC != null) {
 					LithiumMod.replaceControl(LithiumMod.getCurrentLithium().getBaseWindow(), newC.getUUID(), newC);
 				}

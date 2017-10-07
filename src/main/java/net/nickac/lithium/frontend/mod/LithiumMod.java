@@ -71,10 +71,10 @@ public class LithiumMod {
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
 
 		for (LControl control : cc.getControls()) {
-			if (control.getClass().equals(LContainer.class)) {
+			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
 			} else if (control.getUUID().equals(u)) {
-				c.setParent(null);
+				//c.setParent(null);
 				currentLithium.removeControl(control);
 				currentLithium.addControlToGUI(c);
 				return;
