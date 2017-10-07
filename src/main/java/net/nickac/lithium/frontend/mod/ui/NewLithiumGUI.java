@@ -111,7 +111,7 @@ public class NewLithiumGUI extends GuiScreen {
 		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? centerControl((LControl) c.getParent()) : Point.EMPTY;
 
 		if (c.getCentered() == LControl.CenterOptions.NONE) {
-			return new Point(parentLoc.getX() + c.getLocation().getX(), parentLoc.getY() + c.getTop());
+			return new Point(/*parentLoc.getX() + */c.getLocation().getX(), /*parentLoc.getY() +*/ c.getTop());
 		}
 		ScaledResolution sr = getScaledResolution();
 		int parentWidth = sr.getScaledWidth();
@@ -121,17 +121,22 @@ public class NewLithiumGUI extends GuiScreen {
 			parentWidth = c.getParent() instanceof LPanel ? ((LPanel) c.getParent()).getTotalWidth() : ((LControl) c.getParent()).getSize().getWidth();
 			parentHeight = c.getParent() instanceof LPanel ? ((LPanel) c.getParent()).getTotalHeight() : ((LControl) c.getParent()).getSize().getWidth();
 		}*/
-		int newX = parentLoc.getX() + c.getLocation().getX();
+		int newX = /*parentLoc.getX() + */c.getLocation().getX();
 		int newY = parentLoc.getY() + c.getLocation().getY();
 
 		int sizeW = c instanceof LPanel ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth();
 		int sizeH = c instanceof LPanel ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight();
 
+		if (c instanceof LTextLabel) {
+			sizeW = getFontRenderer().getStringWidth(c.getText());
+			sizeH = getFontRenderer().FONT_HEIGHT;
+		}
+
 		boolean centeredX = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
 		boolean centeredY = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
 		if (centeredX)
-			newX = parentLoc.getX() + ((parentWidth / 2) - (sizeW / 2));
-		if (centeredX)
+			newX = ((parentWidth / 2) - (sizeW / 2));
+		if (centeredY)
 			newY = parentLoc.getY() + ((parentHeight / 2) - (sizeH / 2));
 		return new Point(newX, newY);
 	}
@@ -243,8 +248,10 @@ public class NewLithiumGUI extends GuiScreen {
 		int parentOffsetX = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getLeft() : 0;
 		int parentOffsetY = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getTop() : 0;
 */
-		int controlX = centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getLeft(), isCenteredX(b), true);
-		int controlY = centerLoc(b, sr.getScaledHeight(), BUTTON_HEIGHT, b.getTop(), isCenteredY(b), false);
+		Point centerLoc = centerControl(b);
+
+		int controlX = centerLoc.getX();/*centerLoc(b, sr.getScaledWidth(), b.getSize().getWidth(), b.getLeft(), isCenteredX(b), true);*/
+		int controlY = centerLoc.getY();/*centerLoc(b, sr.getScaledHeight(), BUTTON_HEIGHT, b.getTop(), isCenteredY(b), false);*/
 
 		return new GuiButton(globalCounter, controlX, controlY, b.getSize().getWidth(), BUTTON_HEIGHT, b.getText());
 
@@ -380,9 +387,9 @@ public class NewLithiumGUI extends GuiScreen {
 		//Then we render the labels
 		for (LTextLabel l : labelsToRender) {
 			//Since the labels aren't a real GUI control on forge, we must calculate the location independently.
-			int width = getFontRenderer().getStringWidth(l.getText());
+			/*int width = getFontRenderer().getStringWidth(l.getText());
 			int height = getFontRenderer().FONT_HEIGHT;
-
+*/
 			Point loc = centerControl(l);
 
 			drawString(getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());
