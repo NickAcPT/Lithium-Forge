@@ -26,13 +26,17 @@
 package net.nickac.lithium.frontend.mod.ui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.ScaledResolution;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRender;
+import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
 
 import java.io.IOException;
@@ -113,7 +117,7 @@ public class NewLithiumGUI extends GuiScreen {
 		if (c.getCentered() == LControl.CenterOptions.NONE) {
 			return new Point(parentLoc.getX() + c.getLocation().getX(), parentLoc.getY() + c.getLocation().getY());
 		}
-		ScaledResolution sr = getScaledResolution();
+		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
 		int parentWidth = sr.getScaledWidth();
 		int parentHeight = sr.getScaledHeight();
 
@@ -128,8 +132,8 @@ public class NewLithiumGUI extends GuiScreen {
 		int sizeH = c instanceof LPanel ? ((LPanel) c).getTotalHeight() : c.getSize().getHeight();
 
 		if (c instanceof LTextLabel) {
-			sizeW = getFontRenderer().getStringWidth(c.getText());
-			sizeH = getFontRenderer().FONT_HEIGHT;
+			sizeW = ModCoderPackUtils.getFontRenderer().getStringWidth(c.getText());
+			sizeH = ModCoderPackUtils.getFontRenderer().FONT_HEIGHT;
 		}
 
 		boolean centeredX = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
@@ -245,7 +249,7 @@ public class NewLithiumGUI extends GuiScreen {
 	}
 
 	private GuiButton generateGuiButton(LButton b) {
-		ScaledResolution sr = getScaledResolution();
+		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
 /*
 		int parentOffsetX = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getLeft() : 0;
 		int parentOffsetY = (b.getParent() instanceof LControl) ? ((LControl) b.getParent()).getTop() : 0;
@@ -345,21 +349,6 @@ public class NewLithiumGUI extends GuiScreen {
 		}
 	}
 
-	/**
-	 * Returns a new scaled resolution from Minecraft.<br>
-	 * This method exists to easier backport of the mod.<br>
-	 * Between versions, the constructor was changed and
-	 *
-	 * @return A new scaled resolution object
-	 */
-	private ScaledResolution getScaledResolution() {
-		return new ScaledResolution(Minecraft.getMinecraft());
-	}
-
-	private FontRenderer getFontRenderer() {
-		return Minecraft.getMinecraft().fontRenderer;
-	}
-
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -369,7 +358,7 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		//Just get a scaled resolution
-		ScaledResolution sr = getScaledResolution();
+		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
 
 		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();
@@ -394,7 +383,7 @@ public class NewLithiumGUI extends GuiScreen {
 */
 			Point loc = centerControl(l);
 
-			drawString(getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());
+			drawString(ModCoderPackUtils.getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());
 		}
 
 		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
