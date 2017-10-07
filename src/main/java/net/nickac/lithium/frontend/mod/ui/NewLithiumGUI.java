@@ -363,14 +363,6 @@ public class NewLithiumGUI extends GuiScreen {
 		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();
 
-		/*for (Object lControl : baseWindow.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
-			LPanel p = (LPanel) lControl;
-			//drawRect(p.getLeft(), p.getTop(), p.getLeft() + p.getTotalWidth(), p.getTop() + p.getTotalHeight(), (int) Color.WHITE.getHexColor());
-			for (Object l2 : p.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
-				LPanel p2 = (LPanel) l2;
-				drawRect(p2.getLeft(), p2.getTop(), p2.getLeft() + p2.getTotalWidth(), p2.getTop() + p2.getTotalHeight(), (int) Color.GRAY.getHexColor());
-			}
-		}*/
 		//Then, we render all textboxes
 		textBoxes.values().forEach(GuiTextField::drawTextBox);
 
