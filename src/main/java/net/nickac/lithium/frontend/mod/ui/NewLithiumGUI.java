@@ -111,7 +111,7 @@ public class NewLithiumGUI extends GuiScreen {
 		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? centerControl((LControl) c.getParent()) : Point.EMPTY;
 
 		if (c.getCentered() == LControl.CenterOptions.NONE) {
-			return new Point(parentLoc.getX() + c.getLeft(), parentLoc.getY() + c.getTop());
+			return new Point(parentLoc.getX() + c.getLocation().getX(), parentLoc.getY() + c.getTop());
 		}
 		ScaledResolution sr = getScaledResolution();
 		int parentWidth = sr.getScaledWidth();
@@ -130,9 +130,9 @@ public class NewLithiumGUI extends GuiScreen {
 		boolean centeredX = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
 		boolean centeredY = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
 		if (centeredX)
-			newX = parentLoc.getX() + (parentWidth / 2) - (sizeW / 2);
+			newX = parentLoc.getX() + ((parentWidth / 2) - (sizeW / 2));
 		if (centeredX)
-			newY = parentLoc.getY() + (parentHeight / 2) - (sizeH / 2);
+			newY = parentLoc.getY() + ((parentHeight / 2) - (sizeH / 2));
 		return new Point(newX, newY);
 	}
 
@@ -143,7 +143,6 @@ public class NewLithiumGUI extends GuiScreen {
 	 * This is the method that does the heavy lifting..
 	 *
 	 * @param c Control to be added
-	 * @SuppressWarnings("ConstantConditions")
 	 */
 	public void addControlToGUI(LControl c) {
 		//Get scaled resolutin
@@ -384,7 +383,9 @@ public class NewLithiumGUI extends GuiScreen {
 			int width = getFontRenderer().getStringWidth(l.getText());
 			int height = getFontRenderer().FONT_HEIGHT;
 
-			drawString(getFontRenderer(), l.getText(), centerLoc(l, sr.getScaledWidth(), width, l.getLeft(), isCenteredX(l), true), centerLoc(l, sr.getScaledWidth(), height, l.getTop(), isCenteredY(l), false), (int) l.getColor().getHexColor());
+			Point loc = centerControl(l);
+
+			drawString(getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());
 		}
 
 		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
