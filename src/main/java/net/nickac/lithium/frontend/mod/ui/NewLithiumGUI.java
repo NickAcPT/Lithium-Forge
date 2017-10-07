@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
+import net.nickac.lithium.backend.other.objects.Color;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
@@ -111,7 +112,7 @@ public class NewLithiumGUI extends GuiScreen {
 		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? centerControl((LControl) c.getParent()) : Point.EMPTY;
 
 		if (c.getCentered() == LControl.CenterOptions.NONE) {
-			return new Point(/*parentLoc.getX() + */c.getLocation().getX(), /*parentLoc.getY() +*/ c.getTop());
+			return new Point(parentLoc.getX() + c.getLocation().getX(), parentLoc.getY() + c.getLocation().getY());
 		}
 		ScaledResolution sr = getScaledResolution();
 		int parentWidth = sr.getScaledWidth();
@@ -192,7 +193,9 @@ public class NewLithiumGUI extends GuiScreen {
 				labelsToRender.add(lbl);
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
-			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, controlX, c.getTop(), c.getSize().getWidth(), c.getSize().getHeight());
+			int left = controlX;
+			int top = controlY;
+			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, left, top, c.getSize().getWidth(), c.getSize().getHeight());
 			txt.setText(c.getText() != null ? c.getText() : "");
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
@@ -371,15 +374,15 @@ public class NewLithiumGUI extends GuiScreen {
 
 		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();
-/*
+
 		for (Object lControl : baseWindow.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
 			LPanel p = (LPanel) lControl;
-			drawRect(p.getLeft(), p.getTop(), p.getLeft() + p.getTotalWidth(), p.getTop() + p.getTotalHeight(), (int) Color.WHITE.getHexColor());
+			//drawRect(p.getLeft(), p.getTop(), p.getLeft() + p.getTotalWidth(), p.getTop() + p.getTotalHeight(), (int) Color.WHITE.getHexColor());
 			for (Object l2 : p.getControls().stream().filter(cc -> cc instanceof LPanel).toArray()) {
 				LPanel p2 = (LPanel) l2;
 				drawRect(p2.getLeft(), p2.getTop(), p2.getLeft() + p2.getTotalWidth(), p2.getTop() + p2.getTotalHeight(), (int) Color.GRAY.getHexColor());
 			}
-		}*/
+		}
 		//Then, we render all textboxes
 		textBoxes.values().forEach(GuiTextField::drawTextBox);
 
