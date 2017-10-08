@@ -32,6 +32,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
 import net.nickac.lithium.backend.other.objects.Point;
+import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.renders.NickGuiTextField;
@@ -206,7 +207,7 @@ public class NewLithiumGUI extends GuiScreen {
 				if (t.textboxKeyTyped(typedChar, keyCode)) {
 					LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
 					if (lTextBox != null) {
-						LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + t.getText()));
+						LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + SerializationUtils.objectToString(t.getText())));
 					}
 				}
 			}

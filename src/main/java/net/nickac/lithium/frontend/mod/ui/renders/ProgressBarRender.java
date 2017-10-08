@@ -59,4 +59,14 @@ public class ProgressBarRender implements ILithiumControlRenderer<LProgressBar, 
 		Gui.drawRect(startX, top + 2, ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getProgress()), bottom - 2, (int) control.getProgressColor().getHexColor());
 
 	}
+
+	@Override
+	public void mouseClick(LProgressBar control, GuiScreen gui, int mouseX, int mouseY) {
+
+	}
+
+	@Override
+	public void mouseMove(LProgressBar control, GuiScreen gui, int mouseX, int mouseY) {
+
+	}
 }
