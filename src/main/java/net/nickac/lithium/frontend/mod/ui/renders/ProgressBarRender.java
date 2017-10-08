@@ -36,7 +36,7 @@ import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
  * Created by NickAc for Lithium!
  */
 public class ProgressBarRender implements ILithiumControlRenderer<LProgressBar, GuiScreen> {
-	public static int ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, int value) {
+	private static int ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, int value) {
 		double scale = (double) (newEnd - newStart) / (originalEnd - originalStart);
 		return (int) (newStart + ((value - originalStart) * scale));
 	}
@@ -61,7 +61,7 @@ public class ProgressBarRender implements ILithiumControlRenderer<LProgressBar, 
 	}
 
 	@Override
-	public void mouseClick(LProgressBar control, GuiScreen gui, int mouseX, int mouseY) {
+	public void mouseClick(LProgressBar control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
 
 	}
 
