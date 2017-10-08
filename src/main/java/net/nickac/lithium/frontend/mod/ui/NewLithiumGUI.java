@@ -349,6 +349,11 @@ public class NewLithiumGUI extends GuiScreen {
 	}
 
 	@Override
+	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+		super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+	}
+
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		//Just get a scaled resolution
 		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
