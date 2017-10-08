@@ -74,7 +74,6 @@ public class LithiumMod {
 			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
 			} else if (control.getUUID().equals(u)) {
-				//c.setParent(null);
 				currentLithium.removeControl(control);
 				currentLithium.addControlToGUI(c);
 				return;
