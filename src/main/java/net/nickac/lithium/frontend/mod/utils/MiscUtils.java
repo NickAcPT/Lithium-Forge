@@ -25,27 +25,15 @@
 
 package net.nickac.lithium.frontend.mod.utils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
+import java.util.Arrays;
 
 /**
  * Created by NickAc for Lithium!
  */
-public class ModCoderPackUtils {
-	/**
-	 * Returns a new scaled resolution from Minecraft.<br>
-	 * This method exists to easier backport of the mod.<br>
-	 * Between versions, the constructor was changed and
-	 *
-	 * @return A new scaled resolution object
-	 */
-	public static ScaledResolution getScaledResolution() {
-		return new ScaledResolution(Minecraft.getMinecraft());
-	}
-
-
-	public static FontRenderer getFontRenderer() {
-		return Minecraft.getMinecraft().fontRenderer;
+public class MiscUtils {
+	public static String stringToStars(String input) {
+		char[] ca = new char[input.length()];
+		Arrays.fill(ca, '*');
+		return new String(ca);
 	}
 }

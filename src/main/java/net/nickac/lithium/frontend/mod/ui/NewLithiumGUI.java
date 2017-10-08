@@ -28,13 +28,13 @@ package net.nickac.lithium.frontend.mod.ui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.ui.renders.NickGuiTextField;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRender;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
@@ -54,7 +54,7 @@ public class NewLithiumGUI extends GuiScreen {
 
 	//The base window
 	private LWindow baseWindow;
-	private Map<UUID, GuiTextField> textBoxes = new HashMap<>();
+	private Map<UUID, NickGuiTextField> textBoxes = new HashMap<>();
 	private Map<Integer, UUID> textBoxesReverse = new HashMap<>();
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
 	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
@@ -176,7 +176,7 @@ public class NewLithiumGUI extends GuiScreen {
 				labelsToRender.add(lbl);
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
-			GuiTextField txt = new GuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, controlX, controlY, c.getSize().getWidth(), c.getSize().getHeight());
+			NickGuiTextField txt = new NickGuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, controlX, controlY, c.getSize().getWidth(), c.getSize().getHeight(), ((LTextBox) c).isPasswordField());
 			txt.setText(c.getText() != null ? c.getText() : "");
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
@@ -195,7 +195,7 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		textBoxes.values().forEach(GuiTextField::updateCursorCounter);
+		textBoxes.values().forEach(NickGuiTextField::updateCursorCounter);
 	}
 
 	@Override
@@ -261,14 +261,14 @@ public class NewLithiumGUI extends GuiScreen {
 	 */
 	private void softRemoveControl(LControl g) {
 		if (g.getClass().equals(LTextBox.class)) {
-			for (GuiTextField gg : textBoxes.values()) {
+			for (NickGuiTextField gg : textBoxes.values()) {
 				UUID txtUUID = textBoxesReverse.getOrDefault(gg.getId(), null);
 				if (txtUUID != null && g.getUUID().equals(txtUUID)) {
 					textBoxesReverse.remove(gg.getId());
 					textBoxesLReverse.remove(txtUUID);
 
 					//We should take any important data from the GUI control and move it to the LControl instance.
-					GuiTextField gui = textBoxes.getOrDefault(txtUUID, null);
+					NickGuiTextField gui = textBoxes.getOrDefault(txtUUID, null);
 					if (gui != null)
 						g.setText(gui.getText());
 
@@ -362,7 +362,7 @@ public class NewLithiumGUI extends GuiScreen {
 		this.drawDefaultBackground();
 
 		//Then, we render all textboxes
-		textBoxes.values().forEach(GuiTextField::drawTextBox);
+		textBoxes.values().forEach(NickGuiTextField::drawTextBox);
 
 
 		//Then we render the labels
