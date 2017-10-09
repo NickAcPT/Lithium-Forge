@@ -27,12 +27,22 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LCheckBox;
+import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 
 /**
  * Created by NickAc for Lithium!
  */
 public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScreen> {
+
+	private final int PADDING = 2;
+	private final int PADDING_LEFT = 3;
+
+	private Rectangle getCheckBoxRect(LCheckBox c) {
+		int sz = c.getSize().getHeight() - PADDING * 2;
+		return new Rectangle(PADDING_LEFT, PADDING, sz, sz);
+	}
+
 	@Override
 	public void renderLithiumControl(LCheckBox control, GuiScreen gui) {
 
