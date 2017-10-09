@@ -35,6 +35,7 @@ import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.ui.renders.CheckBoxRender;
 import net.nickac.lithium.frontend.mod.ui.renders.NickGuiTextField;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRender;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
@@ -50,6 +51,7 @@ import static net.nickac.lithium.backend.other.LithiumConstants.*;
  */
 public class NewLithiumGUI extends GuiScreen {
 	private static ProgressBarRender progressBarRender = new ProgressBarRender();
+	private static CheckBoxRender checkboxRender = new CheckBoxRender();
 	@SuppressWarnings("FieldCanBeLocal")
 	private final int BUTTON_HEIGHT = 20;
 
@@ -59,6 +61,7 @@ public class NewLithiumGUI extends GuiScreen {
 	private Map<Integer, UUID> textBoxesReverse = new HashMap<>();
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
 	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
+	private Map<UUID, LCheckBox> checkBoxes = new NickHashMap<>();
 
 	//Button stuff
 	//We take a global count number and give a Lithium button
@@ -185,6 +188,8 @@ public class NewLithiumGUI extends GuiScreen {
 
 		} else if (c.getClass().equals(LProgressBar.class)) {
 			progressBars.put(c.getUUID(), (LProgressBar) c);
+		} else if (c.getClass().equals(LCheckBox.class)) {
+			checkBoxes.put(c.getUUID(), (LCheckBox) c);
 		}
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {
 			baseWindow.addControl(c);
@@ -376,7 +381,7 @@ public class NewLithiumGUI extends GuiScreen {
 
 			drawString(ModCoderPackUtils.getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());
 		}
-
+		checkBoxes.values().forEach(c -> checkboxRender.renderLithiumControl(c, this));
 		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
