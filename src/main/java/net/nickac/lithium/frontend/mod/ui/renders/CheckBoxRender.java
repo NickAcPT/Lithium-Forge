@@ -63,7 +63,7 @@ public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScr
 
 	@Override
 	public void mouseClick(LCheckBox control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
-
+		Rectangle rect = getCheckBoxRect(control);
 	}
 
 	@Override
