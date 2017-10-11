@@ -67,6 +67,10 @@ public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScr
 	@Override
 	public void mouseClick(LCheckBox control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
 		Rectangle rect = getCheckBoxRect(control);
+		if (rect.contains(new Point(mouseX, mouseY))) {
+			control.setChecked(!control.isChecked());
+
+		}
 	}
 
 	@Override

@@ -212,7 +212,7 @@ public class NewLithiumGUI extends GuiScreen {
 				if (t.textboxKeyTyped(typedChar, keyCode)) {
 					LTextBox lTextBox = textBoxesLReverse.get(textBoxesReverse.get(t.getId()));
 					if (lTextBox != null) {
-						LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + SerializationUtils.objectToString(t.getText())));
+						ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LITHIUM_TEXTBOX_TEXT_CHANGED + lTextBox.getUUID() + "|" + SerializationUtils.objectToString(t.getText())));
 					}
 				}
 			}
@@ -325,7 +325,7 @@ public class NewLithiumGUI extends GuiScreen {
 		//We can unregister the window, because everything has an UUID, and it wouldn't make sense to reuse a window or its controls.
 		LithiumMod.getWindowManager().unregisterWindow(baseWindow);
 		//Then we need to the server that the window was closed (event)
-		LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_WINDOW_CLOSE + baseWindow.getUUID()));
+		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LITHIUM_WINDOW_CLOSE + baseWindow.getUUID()));
 		//Then, we can "safely" set the current LithiumGUI to null.
 		LithiumMod.setCurrentLithium(null);
 	}
@@ -344,7 +344,7 @@ public class NewLithiumGUI extends GuiScreen {
 		//If we have a button, we send an event to the server with the UUID of the LButton instance.
 		//Later, it will invoke an event on the spigot side.
 		if (buttonId != -1) {
-			LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID()));
+			ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID()));
 		}
 	}
 
@@ -376,9 +376,7 @@ public class NewLithiumGUI extends GuiScreen {
 		//Then we render the labels
 		for (LTextLabel l : labelsToRender) {
 			//Since the labels aren't a real GUI control on forge, we must calculate the location independently.
-	/*int width = getFontRenderer().getStringWidth(l.getText());
-	int height = getFontRenderer().FONT_HEIGHT;
-	*/
+
 			Point loc = centerControl(l);
 
 			drawString(ModCoderPackUtils.getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());

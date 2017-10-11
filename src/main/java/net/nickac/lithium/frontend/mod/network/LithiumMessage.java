@@ -86,7 +86,7 @@ public class LithiumMessage implements IMessage {
 				LWindow receivedWindow = SerializationUtils.stringToObject(w, LWindow.class);
 
 				if (receivedWindow != null) {
-					LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(LITHIUM_WINDOW_OPEN + receivedWindow.getUUID()));
+					ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LITHIUM_WINDOW_OPEN + receivedWindow.getUUID()));
 					Minecraft.getMinecraft().addScheduledTask(() -> {
 						NewLithiumGUI gui = new NewLithiumGUI(receivedWindow);
 						Minecraft.getMinecraft().displayGuiScreen(gui);

@@ -28,6 +28,8 @@ package net.nickac.lithium.frontend.mod.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
+import net.nickac.lithium.frontend.mod.LithiumMod;
+import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 
 /**
  * Created by NickAc for Lithium!
@@ -47,5 +49,9 @@ public class ModCoderPackUtils {
 
 	public static FontRenderer getFontRenderer() {
 		return Minecraft.getMinecraft().fontRenderer;
+	}
+
+	public static void sendLithiumMessageToServer(LithiumMessage m) {
+		LithiumMod.getSimpleNetworkWrapper().sendToServer(m);
 	}
 }

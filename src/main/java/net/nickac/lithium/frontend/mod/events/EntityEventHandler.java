@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
 
 /**
@@ -42,7 +43,7 @@ public class EntityEventHandler {
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
 		//After Joining, we need to clear the suff because we are nice!
 		LithiumMod.getWindowManager().clear();
-		LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage("Lithium|OK"));
+		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage("Lithium|OK"));
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 }
