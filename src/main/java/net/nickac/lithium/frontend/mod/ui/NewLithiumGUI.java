@@ -351,12 +351,14 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		textBoxes.values().forEach(t -> t.mouseClicked(mouseX, mouseY, mouseButton));
+		for (NickGuiTextField t : textBoxes.values()) t.mouseClicked(mouseX, mouseY, mouseButton);
+		for (LCheckBox l : checkBoxes.values()) checkboxRender.mouseClick(l, this, mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+		for (LCheckBox l : checkBoxes.values()) checkboxRender.mouseMove(l, this, mouseX, mouseY);
 	}
 
 	@Override

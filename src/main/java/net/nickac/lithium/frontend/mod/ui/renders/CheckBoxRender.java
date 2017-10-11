@@ -27,7 +27,6 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LCheckBox;
-import net.nickac.lithium.backend.other.objects.Color;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
@@ -55,10 +54,14 @@ public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScr
 	public void renderLithiumControl(LCheckBox control, GuiScreen gui) {
 		Rectangle rect = getCheckBoxRect(control);
 		Rectangle rect2 = getCheckBoxRect(control).inflate(-1, -1);
+		Rectangle rect3 = getCheckBoxRect(control).inflate(-3, -3);
 		//TODO: Allow color change
-		GuiScreen.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) Color.WHITE.getHexColor());
-		GuiScreen.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) Color.BLACK.getHexColor());
-		ModCoderPackUtils.getFontRenderer().drawString(control.getText(), rect2.getRight() + PADDING, rect2.getTop() + PADDING / 2, (int) Color.WHITE.getHexColor());
+		GuiScreen.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getOutsideColor().getHexColor());
+		GuiScreen.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getInsideColor().getHexColor());
+		ModCoderPackUtils.getFontRenderer().drawString(control.getText(), rect2.getRight() + PADDING, rect2.getTop() + PADDING / 2, (int) control.getForeColor().getHexColor());
+		if (control.isChecked()) {
+			GuiScreen.drawRect(rect3.getLeft(), rect3.getTop(), rect3.getRight(), rect3.getBottom(), (int) control.getInsideColor().getHexColor());
+		}
 	}
 
 	@Override
