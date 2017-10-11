@@ -36,6 +36,7 @@ import net.nickac.lithium.backend.controls.impl.LWindow;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
+import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
 import static net.nickac.lithium.backend.other.LithiumConstants.*;
 import static net.nickac.lithium.frontend.mod.utils.NativeUtils.readUTF8String;
