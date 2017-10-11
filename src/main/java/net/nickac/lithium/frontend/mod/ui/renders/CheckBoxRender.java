@@ -27,9 +27,11 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LCheckBox;
+import net.nickac.lithium.backend.other.LithiumConstants;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
+import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
@@ -69,7 +71,8 @@ public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScr
 		Rectangle rect = getCheckBoxRect(control);
 		if (rect.contains(new Point(mouseX, mouseY))) {
 			control.setChecked(!control.isChecked());
-
+			//Here, we risk having a desync from the server, but I'll try my best to sync it.
+			ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LithiumConstants.LITHIUM_TOGGLE_ACTION + control.getUUID()));
 		}
 	}
 
