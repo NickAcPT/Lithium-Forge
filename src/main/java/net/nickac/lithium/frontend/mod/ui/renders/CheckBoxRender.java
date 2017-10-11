@@ -62,13 +62,13 @@ public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScr
 		GuiScreen.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getInsideColor().getHexColor());
 		ModCoderPackUtils.getFontRenderer().drawString(control.getText(), rect2.getRight() + PADDING, rect2.getTop() + PADDING / 2, (int) control.getForeColor().getHexColor());
 		if (control.isChecked()) {
-			GuiScreen.drawRect(rect3.getLeft(), rect3.getTop(), rect3.getRight(), rect3.getBottom(), (int) control.getInsideColor().getHexColor());
+			GuiScreen.drawRect(rect3.getLeft(), rect3.getTop(), rect3.getRight(), rect3.getBottom(), (int) control.getCheckedColor().getHexColor());
 		}
 	}
 
 	@Override
 	public void mouseClick(LCheckBox control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
-		Rectangle rect = getCheckBoxRect(control);
+		Rectangle rect = getCheckBoxRect(control).inflate(-1, -1);
 		if (rect.contains(new Point(mouseX, mouseY))) {
 			control.setChecked(!control.isChecked());
 			//Here, we risk having a desync from the server, but I'll try my best to sync it.
