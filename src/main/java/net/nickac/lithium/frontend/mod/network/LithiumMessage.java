@@ -31,12 +31,15 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LWindow;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
+
+import java.util.UUID;
 
 import static net.nickac.lithium.backend.other.LithiumConstants.*;
 import static net.nickac.lithium.frontend.mod.utils.NativeUtils.readUTF8String;
@@ -103,6 +106,32 @@ public class LithiumMessage implements IMessage {
 
 			} else if (receivedMessage.equals(LITHIUM_CLOSE_WINDOW)) {
 				Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
+			} else if (receivedMessage.equals(LITHIUM_ADD_TO_CONTAINER)) {
+				String w = receivedMessage.substring(LITHIUM_RECEIVE_WINDOW.length());
+				String[] split = w.split("\\|");
+
+				try {
+					//Deserialize the control
+					LControl newC = SerializationUtils.stringToObject(split[1], LControl.class);
+
+					LControl l = LithiumMod.getWindowManager().getControlById(UUID.fromString(split[0]));
+					if (l != null) {
+						//Check if it is a container
+						if (l instanceof LContainer) {
+							((LContainer) l).addControl(newC);
+						}
+					} else {
+						//It might be a window....
+						LWindow window = LithiumMod.getWindowManager().getWindowById(UUID.fromString(split[0]));
+						if (window != null) {
+							window.addControl(newC);
+						}
+
+					}
+
+				} catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ex) {
+					LithiumMod.log("Received malformed packet from server. Ignoring!");
+				}
 			}
 			//System.out.println(String.format("Received %s.", message.text.trim()));
 			return null;

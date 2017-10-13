@@ -52,6 +52,10 @@ public class LithiumMod {
 	private static NewLithiumGUI currentLithium;
 	private static SimpleNetworkWrapper network;
 
+	public static void log(String s) {
+		System.out.println(s);
+	}
+
 	public static NewLithiumGUI getCurrentLithium() {
 		return currentLithium;
 	}
