@@ -69,7 +69,6 @@ public class LithiumMod {
 	}
 
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
-
 		for (LControl control : cc.getControls()) {
 			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
