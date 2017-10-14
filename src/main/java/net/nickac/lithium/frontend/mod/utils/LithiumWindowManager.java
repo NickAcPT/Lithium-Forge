@@ -26,6 +26,7 @@
 package net.nickac.lithium.frontend.mod.utils;
 
 import net.minecraft.client.gui.Gui;
+import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LWindow;
 
@@ -76,10 +77,12 @@ public class LithiumWindowManager {
 
 	public void registerControl(LControl c) {
 		controls.put(c.getUUID(), c);
+		if (c instanceof LContainer) ((LContainer) c).getControls().forEach(this::registerControl);
 	}
 
 	public void removeControl(LControl c) {
 		controls.remove(c.getUUID());
+		if (c instanceof LContainer) ((LContainer) c).getControls().forEach(this::removeControl);
 		nativeControls.remove(c.getUUID());
 	}
 

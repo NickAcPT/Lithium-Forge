@@ -106,8 +106,8 @@ public class LithiumMessage implements IMessage {
 
 			} else if (receivedMessage.equals(LITHIUM_CLOSE_WINDOW)) {
 				Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
-			} else if (receivedMessage.equals(LITHIUM_ADD_TO_CONTAINER)) {
-				String w = receivedMessage.substring(LITHIUM_RECEIVE_WINDOW.length());
+			} else if (receivedMessage.startsWith(LITHIUM_ADD_TO_CONTAINER)) {
+				String w = receivedMessage.substring(LITHIUM_ADD_TO_CONTAINER.length());
 				String[] split = w.split("\\|");
 
 				try {
@@ -143,7 +143,7 @@ public class LithiumMessage implements IMessage {
 					LithiumMod.log("Received malformed packet from server. Ignoring!");
 				}
 			}
-			//System.out.println(String.format("Received %s.", message.text.trim()));
+			System.out.println(String.format("Received %s.", message.text.trim()));
 			return null;
 		}
 	}
