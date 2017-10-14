@@ -23,7 +23,7 @@
  *
  */
 
-package net.nickac.lithium.frontend.mod.ui.renders;
+package net.nickac.lithium.frontend.mod.ui;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;

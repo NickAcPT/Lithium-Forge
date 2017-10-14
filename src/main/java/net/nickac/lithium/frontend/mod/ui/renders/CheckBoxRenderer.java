@@ -38,7 +38,7 @@ import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 /**
  * Created by NickAc for Lithium!
  */
-public class CheckBoxRender implements ILithiumControlRenderer<LCheckBox, GuiScreen> {
+public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiScreen> {
 
 	private final int PADDING = 4;
 	private final int PADDING_LEFT = 3;

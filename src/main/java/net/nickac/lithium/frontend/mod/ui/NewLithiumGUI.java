@@ -35,9 +35,9 @@ import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
-import net.nickac.lithium.frontend.mod.ui.renders.CheckBoxRender;
-import net.nickac.lithium.frontend.mod.ui.renders.NickGuiTextField;
-import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRender;
+import net.nickac.lithium.frontend.mod.ui.renders.CheckBoxRenderer;
+import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRenderer;
+import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
 
@@ -50,8 +50,9 @@ import static net.nickac.lithium.backend.other.LithiumConstants.*;
  * Created by NickAc for Lithium!
  */
 public class NewLithiumGUI extends GuiScreen {
-	private static ProgressBarRender progressBarRender = new ProgressBarRender();
-	private static CheckBoxRender checkboxRender = new CheckBoxRender();
+	private static ProgressBarRenderer progressBarRenderer = new ProgressBarRenderer();
+	private static CheckBoxRenderer checkboxRenderer = new CheckBoxRenderer();
+	private static TextLabelRenderer textLabelRenderer = new TextLabelRenderer();
 	@SuppressWarnings("FieldCanBeLocal")
 	private final int BUTTON_HEIGHT = 20;
 
@@ -62,6 +63,7 @@ public class NewLithiumGUI extends GuiScreen {
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
 	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
 	private Map<UUID, LCheckBox> checkBoxes = new NickHashMap<>();
+	private List<LTextLabel> labels = new ArrayList<>();
 
 	//Button stuff
 	//We take a global count number and give a Lithium button
@@ -70,8 +72,6 @@ public class NewLithiumGUI extends GuiScreen {
 	private Map<UUID, Integer> reverseLButtonsCounter = new HashMap<>();
 	//We take a global count button and give a GuiButton id
 	private Map<Integer, Integer> reverseButtonsCounter = new HashMap<>();
-	//Labels to be rendered!
-	private List<LTextLabel> labelsToRender = new ArrayList<>();
 	private int globalCounter = 0;
 
 	public NewLithiumGUI(LWindow base) {
@@ -176,8 +176,8 @@ public class NewLithiumGUI extends GuiScreen {
 			reverseButtonsCounter.put(bb.id, globalCounter);
 		} else if (c.getClass().equals(LTextLabel.class)) {
 			LTextLabel lbl = (LTextLabel) c;
-			if (!labelsToRender.contains(lbl)) {
-				labelsToRender.add(lbl);
+			if (!labels.contains(lbl)) {
+				labels.add(lbl);
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
 			NickGuiTextField txt = new NickGuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, controlX, controlY, c.getSize().getWidth(), c.getSize().getHeight(), ((LTextBox) c).isPasswordField());
@@ -293,9 +293,9 @@ public class NewLithiumGUI extends GuiScreen {
 				}
 			}
 		} else if (g.getClass().equals(LTextLabel.class)) {
-			for (LTextLabel lTextLabel : labelsToRender) {
+			for (LTextLabel lTextLabel : labels) {
 				if (lTextLabel.getUUID().equals(g.getUUID())) {
-					labelsToRender.remove(lTextLabel);
+					labels.remove(lTextLabel);
 					break;
 				}
 			}
@@ -352,13 +352,13 @@ public class NewLithiumGUI extends GuiScreen {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		for (NickGuiTextField t : textBoxes.values()) t.mouseClicked(mouseX, mouseY, mouseButton);
-		for (LCheckBox l : checkBoxes.values()) checkboxRender.mouseClick(l, this, mouseX, mouseY, mouseButton);
+		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseClick(l, this, mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-		for (LCheckBox l : checkBoxes.values()) checkboxRender.mouseMove(l, this, mouseX, mouseY);
+		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseMove(l, this, mouseX, mouseY);
 	}
 
 	@Override
@@ -374,15 +374,9 @@ public class NewLithiumGUI extends GuiScreen {
 
 
 		//Then we render the labels
-		for (LTextLabel l : labelsToRender) {
-			//Since the labels aren't a real GUI control on forge, we must calculate the location independently.
-
-			Point loc = centerControl(l);
-
-			drawString(ModCoderPackUtils.getFontRenderer(), l.getText(), loc.getX(), loc.getY(), (int) l.getColor().getHexColor());
-		}
-		checkBoxes.values().forEach(c -> checkboxRender.renderLithiumControl(c, this));
-		progressBars.values().forEach(l -> progressBarRender.renderLithiumControl(l, this));
+		labels.forEach(l -> textLabelRenderer.renderLithiumControl(l, this));
+		checkBoxes.values().forEach(c -> checkboxRenderer.renderLithiumControl(c, this));
+		progressBars.values().forEach(l -> progressBarRenderer.renderLithiumControl(l, this));
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
