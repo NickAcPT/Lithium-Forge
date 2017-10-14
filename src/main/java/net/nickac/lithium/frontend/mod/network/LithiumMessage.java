@@ -143,7 +143,7 @@ public class LithiumMessage implements IMessage {
 					LithiumMod.log("Received malformed packet from server. Ignoring!");
 				}
 			}
-			System.out.println(String.format("Received %s.", message.text.trim()));
+			//System.out.println(String.format("Received %s.", message.text.trim()));
 			return null;
 		}
 	}
