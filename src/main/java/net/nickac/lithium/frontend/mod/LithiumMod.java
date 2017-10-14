@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
+import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.frontend.mod.events.NetworkEventHandler;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
@@ -50,7 +51,16 @@ public class LithiumMod {
 
 	private static LithiumWindowManager windowManager = new LithiumWindowManager();
 	private static NewLithiumGUI currentLithium;
+	private static LOverlay currentLithiumOverlay;
 	private static SimpleNetworkWrapper network;
+
+	public static LOverlay getCurrentLithiumOverlay() {
+		return currentLithiumOverlay;
+	}
+
+	public static void setCurrentLithiumOverlay(LOverlay currentLithiumOverlay) {
+		LithiumMod.currentLithiumOverlay = currentLithiumOverlay;
+	}
 
 	public static void log(String s) {
 		System.out.println(s);
