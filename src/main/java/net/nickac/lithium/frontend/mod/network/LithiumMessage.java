@@ -142,8 +142,27 @@ public class LithiumMessage implements IMessage {
 				} catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ex) {
 					LithiumMod.log("Received malformed packet from server. Ignoring!");
 				}
+			} else if (receivedMessage.startsWith(LITHIUM_REMOVE_FROM_CONTAINER)) {
+				String w = receivedMessage.substring(LITHIUM_REMOVE_FROM_CONTAINER.length());
+				String[] split = w.split("\\|");
+
+				UUID containerUUID = UUID.fromString(split[0]);
+				UUID controlUUID = UUID.fromString(split[1]);
+
+
+				LControl container = LithiumMod.getWindowManager().getControlById(containerUUID);
+				if (container != null) {
+					if (container instanceof LContainer && LithiumMod.getCurrentLithium() != null) {
+						LControl toRemove = LithiumMod.getWindowManager().getControlById(controlUUID);
+						if (toRemove != null) {
+							LithiumMod.getCurrentLithium().removeControl(toRemove);
+						}
+					}
+				}
+
 			}
-			//System.out.println(String.format("Received %s.", message.text.trim()));
+
+			System.out.println(String.format("Received %s.", message.text.trim()));
 			return null;
 		}
 	}
