@@ -114,17 +114,27 @@ public class LithiumMessage implements IMessage {
 					//Deserialize the control
 					LControl newC = SerializationUtils.stringToObject(split[1], LControl.class);
 
-					LControl l = LithiumMod.getWindowManager().getControlById(UUID.fromString(split[0]));
+					UUID uuid = UUID.fromString(split[0]);
+					LControl l = LithiumMod.getWindowManager().getControlById(uuid);
 					if (l != null) {
 						//Check if it is a container
 						if (l instanceof LContainer) {
 							((LContainer) l).addControl(newC);
+							if (LithiumMod.getCurrentLithium() != null) {
+								//Lets try adding this control.
+								//It might work...
+								LithiumMod.getCurrentLithium().addControlToGUI(newC);
+							}
 						}
 					} else {
 						//It might be a window....
-						LWindow window = LithiumMod.getWindowManager().getWindowById(UUID.fromString(split[0]));
+						LWindow window = LithiumMod.getWindowManager().getWindowById(uuid);
 						if (window != null) {
 							window.addControl(newC);
+							if (LithiumMod.getCurrentLithium() != null &&
+									LithiumMod.getCurrentLithium().getBaseWindow().getUUID().equals(uuid)) {
+								LithiumMod.getCurrentLithium().addControlToGUI(newC);
+							}
 						}
 
 					}
