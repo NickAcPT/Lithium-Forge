@@ -25,6 +25,8 @@
 
 package net.nickac.lithium.frontend.mod.utils;
 
+import net.nickac.lithium.backend.controls.LControl;
+
 import java.util.Arrays;
 
 /**
@@ -35,5 +37,13 @@ public class MiscUtils {
 		char[] ca = new char[input.length()];
 		Arrays.fill(ca, '*');
 		return new String(ca);
+	}
+
+	public static boolean isCenteredX(LControl c) {
+		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
+	}
+
+	public static boolean isCenteredY(LControl c) {
+		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
 	}
 }

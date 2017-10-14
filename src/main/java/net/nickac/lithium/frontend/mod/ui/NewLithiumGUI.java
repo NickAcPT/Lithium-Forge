@@ -25,7 +25,6 @@
 
 package net.nickac.lithium.frontend.mod.ui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -38,6 +37,7 @@ import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.renders.CheckBoxRenderer;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRenderer;
 import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
+import net.nickac.lithium.frontend.mod.utils.MiscUtils;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
 
@@ -149,8 +149,9 @@ public class NewLithiumGUI extends GuiScreen {
 	public void addControlToGUI(LControl c) {
 
 		//Here we check if control is a panel, and if it is, check if it's centered on x or y axis.
-		boolean centeredX = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
-		boolean centeredY = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
+		boolean centeredX = MiscUtils.isCenteredX(c);
+		boolean centeredY = MiscUtils.isCenteredY(c);
+
 
 
 		//Then we finally calculate the location of the control.
@@ -180,7 +181,13 @@ public class NewLithiumGUI extends GuiScreen {
 				labels.add(lbl);
 			}
 		} else if (c.getClass().equals(LTextBox.class)) {
-			NickGuiTextField txt = new NickGuiTextField(globalCounter, Minecraft.getMinecraft().fontRenderer, controlX, controlY, c.getSize().getWidth(), c.getSize().getHeight(), ((LTextBox) c).isPasswordField());
+			NickGuiTextField txt = new NickGuiTextField(
+					globalCounter,
+					ModCoderPackUtils.getFontRenderer(),
+					controlX, controlY,
+					c.getSize().getWidth(), c.getSize().getHeight(),
+					((LTextBox) c).isPasswordField()
+			);
 			txt.setText(c.getText() != null ? c.getText() : "");
 			textBoxes.put(c.getUUID(), txt);
 			textBoxesReverse.put(txt.getId(), c.getUUID());
@@ -196,7 +203,6 @@ public class NewLithiumGUI extends GuiScreen {
 		}
 		globalCounter++;
 	}
-
 
 	@Override
 	public void updateScreen() {
@@ -217,14 +223,6 @@ public class NewLithiumGUI extends GuiScreen {
 				}
 			}
 		});
-	}
-
-	private boolean isCenteredX(LControl c) {
-		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
-	}
-
-	private boolean isCenteredY(LControl c) {
-		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
 	}
 
 	public void removeControl(LControl g) {
@@ -339,12 +337,15 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
-		//Get the id of the button. It's safer to use and store the button's own id(integer) instead of the instance itself.
+		//Get the id of the button
+		// It's safer to use and store the button's own id(integer) instead of the instance itself.
 		int buttonId = reverseButtonsCounter.getOrDefault(button.id, -1);
 		//If we have a button, we send an event to the server with the UUID of the LButton instance.
 		//Later, it will invoke an event on the spigot side.
 		if (buttonId != -1) {
-			ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID()));
+			ModCoderPackUtils.sendLithiumMessageToServer(
+					new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID())
+			);
 		}
 	}
 
