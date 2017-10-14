@@ -42,6 +42,7 @@ public class EntityEventHandler {
 	@SubscribeEvent
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
 		//After Joining, we need to clear the suff because we are nice!
+		LithiumMod.setCurrentLithiumOverlay(null);
 		LithiumMod.getWindowManager().clear();
 		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage("Lithium|OK"));
 		MinecraftForge.EVENT_BUS.unregister(this);
