@@ -166,7 +166,6 @@ public class LithiumMessage implements IMessage {
 					String w = receivedMessage.substring(LITHIUM_SHOW_OVERLAY.length());
 					LOverlay overlay = SerializationUtils.stringToObject(w, LOverlay.class);
 					LithiumMod.setCurrentLithiumOverlay(overlay);
-
 				} catch (Exception e) {
 					LithiumMod.log("An error occured while creating an overlay.");
 					LithiumMod.log("Please send this to a Lithium Developer:");
