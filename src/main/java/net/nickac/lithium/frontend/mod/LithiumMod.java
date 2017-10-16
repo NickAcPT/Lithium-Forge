@@ -85,14 +85,20 @@ public class LithiumMod {
 	}
 
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
+		boolean changed = false;
 		for (LControl control : cc.getControls()) {
 			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
 			} else if (control.getUUID().equals(u)) {
 				currentLithium.removeControl(control);
 				currentLithium.addControlToGUI(c);
-				return;
 			}
+			changed = true;
+		}
+		if (!changed && currentLithiumOverlay != null) {
+			//Try to change the overlay
+			currentLithiumOverlay.removeControl(u);
+			currentLithiumOverlay.addControl(c);
 		}
 	}
 
