@@ -85,21 +85,19 @@ public class LithiumMod {
 	}
 
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
-		boolean changed = false;
 		for (LControl control : cc.getControls()) {
 			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
 			} else if (control.getUUID().equals(u)) {
-				currentLithium.removeControl(control);
-				currentLithium.addControlToGUI(c);
+				if (currentLithium != null) {
+					//Try to check if it is a window
+					currentLithium.removeControl(control);
+					currentLithium.addControlToGUI(c);
+				} else if (currentLithiumOverlay != null) {
+					//It might be the overlay
+					currentLithiumOverlay.addControl(c);
+				}
 			}
-			changed = true;
-		}
-		if (!changed && currentLithiumOverlay != null) {
-			//Try to change the overlay
-			//currentLithiumOverlay.removeControl(u);
-			//Try to override the original...
-			currentLithiumOverlay.addControl(c);
 		}
 	}
 

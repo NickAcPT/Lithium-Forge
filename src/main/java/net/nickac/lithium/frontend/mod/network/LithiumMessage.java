@@ -101,9 +101,14 @@ public class LithiumMessage implements IMessage {
 			} else if (receivedMessage.startsWith(LITHIUM_CONTROL_CHANGED)) {
 				String c = receivedMessage.substring(LITHIUM_CONTROL_CHANGED.length());
 				LControl newC = SerializationUtils.stringToObject(c, LControl.class);
+
+				if (newC.getParent() != null) {
+					LithiumMod.replaceControl(newC.getParent(), newC.getUUID(), newC);
+				}
+				/*
 				if (LithiumMod.getCurrentLithium() != null && newC != null) {
 					LithiumMod.replaceControl(LithiumMod.getCurrentLithium().getBaseWindow(), newC.getUUID(), newC);
-				}
+				}*/
 
 			} else if (receivedMessage.equals(LITHIUM_CLOSE_WINDOW)) {
 				Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
