@@ -97,7 +97,8 @@ public class LithiumMod {
 		}
 		if (!changed && currentLithiumOverlay != null) {
 			//Try to change the overlay
-			currentLithiumOverlay.removeControl(u);
+			//currentLithiumOverlay.removeControl(u);
+			//Try to override the original...
 			currentLithiumOverlay.addControl(c);
 		}
 	}
