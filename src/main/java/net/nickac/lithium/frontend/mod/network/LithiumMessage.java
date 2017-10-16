@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
+import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.backend.controls.impl.LWindow;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
@@ -100,9 +101,14 @@ public class LithiumMessage implements IMessage {
 			} else if (receivedMessage.startsWith(LITHIUM_CONTROL_CHANGED)) {
 				String c = receivedMessage.substring(LITHIUM_CONTROL_CHANGED.length());
 				LControl newC = SerializationUtils.stringToObject(c, LControl.class);
+
+				if (newC.getParent() != null) {
+					LithiumMod.replaceControl(newC.getParent(), newC.getUUID(), newC);
+				}
+				/*
 				if (LithiumMod.getCurrentLithium() != null && newC != null) {
 					LithiumMod.replaceControl(LithiumMod.getCurrentLithium().getBaseWindow(), newC.getUUID(), newC);
-				}
+				}*/
 
 			} else if (receivedMessage.equals(LITHIUM_CLOSE_WINDOW)) {
 				Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
@@ -160,6 +166,16 @@ public class LithiumMessage implements IMessage {
 					}
 				}
 
+			} else if (receivedMessage.startsWith(LITHIUM_SHOW_OVERLAY)) {
+				try {
+					String w = receivedMessage.substring(LITHIUM_SHOW_OVERLAY.length());
+					LOverlay overlay = SerializationUtils.stringToObject(w, LOverlay.class);
+					LithiumMod.setCurrentLithiumOverlay(overlay);
+				} catch (Exception e) {
+					LithiumMod.log("An error occured while creating an overlay.");
+					LithiumMod.log("Please send this to a Lithium Developer:");
+					LithiumMod.log("*" + SerializationUtils.objectToString(e.toString()) + "*");
+				}
 			}
 
 			System.out.println(String.format("Received %s.", message.text.trim()));

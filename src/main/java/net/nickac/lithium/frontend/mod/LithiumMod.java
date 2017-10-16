@@ -34,8 +34,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
+import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.frontend.mod.events.NetworkEventHandler;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.ui.LithiumOverlay;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.LithiumWindowManager;
 
@@ -50,7 +52,17 @@ public class LithiumMod {
 
 	private static LithiumWindowManager windowManager = new LithiumWindowManager();
 	private static NewLithiumGUI currentLithium;
+	private static LOverlay currentLithiumOverlay;
 	private static SimpleNetworkWrapper network;
+	private LithiumOverlay overlayRenderer;
+
+	public static LOverlay getCurrentLithiumOverlay() {
+		return currentLithiumOverlay;
+	}
+
+	public static void setCurrentLithiumOverlay(LOverlay currentLithiumOverlay) {
+		LithiumMod.currentLithiumOverlay = currentLithiumOverlay;
+	}
 
 	public static void log(String s) {
 		System.out.println(s);
@@ -77,9 +89,14 @@ public class LithiumMod {
 			if (control instanceof LContainer) {
 				replaceControl(((LContainer) control), u, c);
 			} else if (control.getUUID().equals(u)) {
-				currentLithium.removeControl(control);
-				currentLithium.addControlToGUI(c);
-				return;
+				if (currentLithium != null) {
+					//Try to check if it is a window
+					currentLithium.removeControl(control);
+					currentLithium.addControlToGUI(c);
+				} else if (currentLithiumOverlay != null) {
+					//It might be the overlay
+					currentLithiumOverlay.addControl(c);
+				}
 			}
 		}
 	}
@@ -88,10 +105,11 @@ public class LithiumMod {
 		return network;
 	}
 
-
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		overlayRenderer = new LithiumOverlay();
 		MinecraftForge.EVENT_BUS.register(NetworkEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(overlayRenderer);
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(LithiumMod.CHANNELNAME);
 		getSimpleNetworkWrapper().registerMessage(LithiumMessage.Handle.class, LithiumMessage.class, 0, Side.CLIENT);
 	}
