@@ -37,6 +37,7 @@ import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.frontend.mod.events.NetworkEventHandler;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.ui.LithiumOverlay;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.LithiumWindowManager;
 
@@ -53,6 +54,7 @@ public class LithiumMod {
 	private static NewLithiumGUI currentLithium;
 	private static LOverlay currentLithiumOverlay;
 	private static SimpleNetworkWrapper network;
+	private LithiumOverlay overlayRenderer;
 
 	public static LOverlay getCurrentLithiumOverlay() {
 		return currentLithiumOverlay;
@@ -98,10 +100,11 @@ public class LithiumMod {
 		return network;
 	}
 
-
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+
 		MinecraftForge.EVENT_BUS.register(NetworkEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(overlayRenderer);
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(LithiumMod.CHANNELNAME);
 		getSimpleNetworkWrapper().registerMessage(LithiumMessage.Handle.class, LithiumMessage.class, 0, Side.CLIENT);
 	}
