@@ -25,12 +25,13 @@
 
 package net.nickac.lithium.frontend.mod.ui;
 
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.backend.controls.impl.LProgressBar;
+import net.nickac.lithium.backend.controls.impl.LTextLabel;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRenderer;
@@ -39,7 +40,7 @@ import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
 /**
  * Created by NickAc for Lithium!
  */
-public class LithiumOverlay extends Gui {
+public class LithiumOverlay extends GuiScreen {
 	@SubscribeEvent
 	public void renderOverlay(RenderGameOverlayEvent event) {
 		if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
@@ -50,7 +51,7 @@ public class LithiumOverlay extends Gui {
 						ILithiumControlRenderer renderer = null;
 						if (lControl.getClass().equals(LProgressBar.class))
 							renderer = new ProgressBarRenderer();
-						else if (lControl.getClass().equals(TextLabelRenderer.class))
+						else if (lControl.getClass().equals(LTextLabel.class))
 							renderer = new TextLabelRenderer();
 
 						if (renderer != null) renderer.renderLithiumControl(lControl, this);
