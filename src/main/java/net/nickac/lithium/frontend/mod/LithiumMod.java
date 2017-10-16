@@ -102,7 +102,7 @@ public class LithiumMod {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-
+		overlayRenderer = new LithiumOverlay();
 		MinecraftForge.EVENT_BUS.register(NetworkEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(overlayRenderer);
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(LithiumMod.CHANNELNAME);
