@@ -103,7 +103,7 @@ public class LithiumMessage implements IMessage {
 				LControl newC = SerializationUtils.stringToObject(c, LControl.class);
 
 				if (newC.getParent() != null) {
-					LithiumMod.replaceControl(newC.getParent(), newC.getUUID(), newC);
+					Minecraft.getMinecraft().addScheduledTask(() -> LithiumMod.replaceControl(newC.getParent(), newC.getUUID(), newC));
 				}
 				/*
 				if (LithiumMod.getCurrentLithium() != null && newC != null) {
@@ -178,7 +178,7 @@ public class LithiumMessage implements IMessage {
 				}
 			}
 
-			System.out.println(String.format("Received %s.", message.text.trim()));
+			//System.out.println(String.format("Received %s.", message.text.trim()));
 			return null;
 		}
 	}

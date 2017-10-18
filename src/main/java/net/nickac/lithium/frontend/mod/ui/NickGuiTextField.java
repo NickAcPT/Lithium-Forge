@@ -332,7 +332,7 @@ public class NickGuiTextField extends Gui {
 			this.setSelectionPos(0);
 			return true;
 		} else if (GuiScreen.isKeyComboCtrlC(keyCode)) {
-			GuiScreen.setClipboardString(this.getSelectedText());
+			if (!password) GuiScreen.setClipboardString(this.getSelectedText());
 			return true;
 		} else if (GuiScreen.isKeyComboCtrlV(keyCode)) {
 			if (this.isEnabled) {
