@@ -66,7 +66,8 @@ public class ProgressBarRenderer implements ILithiumControlRenderer<LProgressBar
 	}
 
 	@Override
-	public void mouseMove(LProgressBar control, GuiScreen gui, int mouseX, int mouseY) {
+	public void mouseClickMove(LProgressBar control, GuiScreen gui, int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 
 	}
+
 }

@@ -77,7 +77,8 @@ public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiS
 	}
 
 	@Override
-	public void mouseMove(LCheckBox control, GuiScreen gui, int mouseX, int mouseY) {
+	public void mouseClickMove(LCheckBox control, GuiScreen gui, int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 
 	}
+
 }

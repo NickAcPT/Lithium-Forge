@@ -63,6 +63,7 @@ public class NewLithiumGUI extends GuiScreen {
 	private Map<UUID, LTextBox> textBoxesLReverse = new HashMap<>();
 	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
 	private Map<UUID, LCheckBox> checkBoxes = new NickHashMap<>();
+	private Map<UUID, LSlider> sliders = new NickHashMap<>();
 	private List<LTextLabel> labels = new ArrayList<>();
 
 	//Button stuff
@@ -312,7 +313,6 @@ public class NewLithiumGUI extends GuiScreen {
 				gg.setInsideColor(gui.getInsideColor());
 				gg.setProgressColor(gui.getProgressColor());
 			}
-			//gg.setProgress();
 			progressBars.remove(g.getUUID());
 		}
 	}
@@ -359,7 +359,7 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseMove(l, this, mouseX, mouseY);
+		//for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseClickMove(l, this, mouseX, mouseY);
 	}
 
 	@Override

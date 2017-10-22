@@ -49,7 +49,8 @@ public class TextLabelRenderer implements ILithiumControlRenderer<LTextLabel, Gu
 	}
 
 	@Override
-	public void mouseMove(LTextLabel control, GuiScreen gui, int mouseX, int mouseY) {
+	public void mouseClickMove(LTextLabel control, GuiScreen gui, int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 
 	}
+
 }
