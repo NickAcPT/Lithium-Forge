@@ -25,14 +25,21 @@
 
 package net.nickac.lithium.frontend.mod.ui.renders;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LSlider;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
+import net.nickac.lithium.frontend.mod.utils.NickHashMap;
+
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by NickAc for Lithium!
  */
 public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScreen> {
+
+	public static Map<UUID, GuiButton> buttons = new NickHashMap<>();
 
 	@Override
 	public void renderLithiumControl(LSlider control, GuiScreen gui) {
