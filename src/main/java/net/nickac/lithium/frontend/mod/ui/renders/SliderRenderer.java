@@ -25,24 +25,40 @@
 
 package net.nickac.lithium.frontend.mod.ui.renders;
 
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LSlider;
+import net.nickac.lithium.backend.other.objects.Point;
+import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
-import net.nickac.lithium.frontend.mod.utils.NickHashMap;
-
-import java.util.Map;
-import java.util.UUID;
+import net.nickac.lithium.frontend.mod.ui.ButtonRenderer;
+import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 
 /**
  * Created by NickAc for Lithium!
  */
 public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScreen> {
+	private static int ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, int value) {
+		double scale = (double) (newEnd - newStart) / (originalEnd - originalStart);
+		return (int) (newStart + ((value - originalStart) * scale));
+	}
 
-	public static Map<UUID, GuiButton> buttons = new NickHashMap<>();
+	private final int SLIDER_WIDTH = 5;
 
 	@Override
 	public void renderLithiumControl(LSlider control, GuiScreen gui) {
+		Point loc = NewLithiumGUI.centerControl(control);
+
+		Rectangle rect = new Rectangle(loc.getX(), loc.getY(), control.getSize().getWidth(), control.getSize().getHeight());
+		Rectangle rect2 = rect.inflate(-1, -1);
+
+		Gui.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getBorderColor().getHexColor());
+		Gui.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getBackgroundColor().getHexColor());
+
+		int startX = rect.getLeft();
+		int endX = rect.getRight() - SLIDER_WIDTH;
+
+		ButtonRenderer.drawButton(gui, "", 0,0,ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()), rect.getY(), SLIDER_WIDTH, rect.getHeight());
 
 	}
 

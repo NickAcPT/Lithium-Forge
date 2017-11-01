@@ -27,7 +27,9 @@ package net.nickac.lithium.frontend.mod.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 
@@ -43,15 +45,27 @@ public class ModCoderPackUtils {
 	 * @return A new scaled resolution object
 	 */
 	public static ScaledResolution getScaledResolution() {
-		return new ScaledResolution(Minecraft.getMinecraft());
+		return new ScaledResolution(getMinecraft());
+	}
+
+	public static Minecraft getMinecraft() {
+		return Minecraft.getMinecraft();
 	}
 
 
 	public static FontRenderer getFontRenderer() {
-		return Minecraft.getMinecraft().fontRenderer;
+		return getMinecraft().fontRenderer;
 	}
 
 	public static void sendLithiumMessageToServer(LithiumMessage m) {
 		LithiumMod.getSimpleNetworkWrapper().sendToServer(m);
+	}
+
+	public static GuiScreen getCurrentScreen() {
+		return getMinecraft().currentScreen;
+	}
+
+	public static ResourceLocation getButtonTextures() {
+		return new ResourceLocation("textures/gui/widgets.png");
 	}
 }
