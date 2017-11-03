@@ -46,4 +46,9 @@ public class MiscUtils {
 	public static boolean isCenteredY(LControl c) {
 		return c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
 	}
+
+	public static int ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, int value) {
+		double scale = (double) (newEnd - newStart) / (originalEnd - originalStart);
+		return (int) (newStart + ((value - originalStart) * scale));
+	}
 }

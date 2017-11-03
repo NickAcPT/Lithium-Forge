@@ -359,21 +359,35 @@ public class NewLithiumGUI extends GuiScreen {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		for (NickGuiTextField t : textBoxes.values()) t.mouseClicked(mouseX, mouseY, mouseButton);
-		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseClick(l, this, mouseX, mouseY, mouseButton);
+
+
+		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
+		int factor = sr.getScaleFactor();
+
+		int newX = mouseX / factor;
+		int newY = mouseY / factor;
+
+		for (NickGuiTextField t : textBoxes.values()) t.mouseClicked(newX, newY, mouseButton);
+		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseClick(l, this, newX, newY, mouseButton);
+		for (LSlider l : sliders.values()) sliderRenderer.mouseClick(l, this, newX, newY, mouseButton);
+
 	}
 
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+
+		Point newPoint = ModCoderPackUtils.convertPointToScaled(new Point(mouseX, mouseY));
+
 		for (LSlider l : sliders.values())
-			sliderRenderer.mouseClickMove(l, this, mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+			sliderRenderer.mouseClickMove(l, this, newPoint.getX(), newPoint.getY(), clickedMouseButton, timeSinceLastClick);
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		//Just get a scaled resolution
 		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
+
 
 		//Then we draw a background to make it easier to see
 		this.drawDefaultBackground();

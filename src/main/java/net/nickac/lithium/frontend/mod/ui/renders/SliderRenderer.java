@@ -31,19 +31,16 @@ import net.nickac.lithium.backend.controls.impl.LSlider;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
+import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.ui.ButtonRenderer;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
+import net.nickac.lithium.frontend.mod.utils.MiscUtils;
 
 /**
  * Created by NickAc for Lithium!
  */
 public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScreen> {
-	private static int ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, int value) {
-		double scale = (double) (newEnd - newStart) / (originalEnd - originalStart);
-		return (int) (newStart + ((value - originalStart) * scale));
-	}
-
-	private final int SLIDER_WIDTH = 5;
+	private final int SLIDER_WIDTH = 10;
 
 	@Override
 	public void renderLithiumControl(LSlider control, GuiScreen gui) {
@@ -52,19 +49,39 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		Rectangle rect = new Rectangle(loc.getX(), loc.getY(), control.getSize().getWidth(), control.getSize().getHeight());
 		Rectangle rect2 = rect.inflate(-1, -1);
 
+		//Draw border and then inside
 		Gui.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getBorderColor().getHexColor());
 		Gui.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getBackgroundColor().getHexColor());
 
 		int startX = rect.getLeft();
 		int endX = rect.getRight() - SLIDER_WIDTH;
 
-		ButtonRenderer.drawButton(gui, "", 0,0,ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()), rect.getY(), SLIDER_WIDTH, rect.getHeight());
+		//Then draw the handle
+		ButtonRenderer.drawButton(
+				gui,
+				"",
+				0,
+				0,
+				MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()),
+				rect.getY() + 1,
+				SLIDER_WIDTH,
+				rect.getHeight() - 3
+		);
 
 	}
 
 	@Override
 	public void mouseClick(LSlider control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
+		LithiumMod.log("X: " + mouseX + "; Y: " + mouseY);
 
+		Point point = NewLithiumGUI.centerControl(control);
+
+		Rectangle rect = new Rectangle(point, control.getSize());
+
+
+
+
+		LithiumMod.log("Hovered: " + (mouseX >= rect.getLeft() && mouseY >= rect.getTop() && mouseX < rect.getRight() && mouseY < rect.getBottom()));
 	}
 
 	@Override

@@ -30,6 +30,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
+import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 
@@ -68,4 +69,38 @@ public class ModCoderPackUtils {
 	public static ResourceLocation getButtonTextures() {
 		return new ResourceLocation("textures/gui/widgets.png");
 	}
+
+	public static Point convertPointToScaled(Point original) {
+		int originalWidth = getDisplayWidth();
+		int originalHeight = getDisplayHeight();
+
+		ScaledResolution sr = getScaledResolution();
+
+		return new Point(
+				MiscUtils.ConvertRange(
+						0,
+						originalWidth,
+						0,
+						sr.getScaledHeight(),
+						original.getX()
+				),
+				MiscUtils.ConvertRange(
+						0,
+						originalHeight,
+						0,
+						sr.getScaledHeight(),
+						original.getY()
+				)
+		);
+
+	}
+
+	public static int getDisplayHeight() {
+		return getMinecraft().displayHeight;
+	}
+
+	public static int getDisplayWidth() {
+		return getMinecraft().displayWidth;
+	}
+
 }

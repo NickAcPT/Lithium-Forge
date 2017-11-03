@@ -31,15 +31,12 @@ import net.nickac.lithium.backend.controls.impl.LProgressBar;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
+import net.nickac.lithium.frontend.mod.utils.MiscUtils;
 
 /**
  * Created by NickAc for Lithium!
  */
 public class ProgressBarRenderer implements ILithiumControlRenderer<LProgressBar, GuiScreen> {
-	private static int ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, int value) {
-		double scale = (double) (newEnd - newStart) / (originalEnd - originalStart);
-		return (int) (newStart + ((value - originalStart) * scale));
-	}
 
 	@Override
 	public void renderLithiumControl(LProgressBar control, GuiScreen gui) {
@@ -56,7 +53,7 @@ public class ProgressBarRenderer implements ILithiumControlRenderer<LProgressBar
 		int startX = left + 2;
 		int endX = right - 2;
 
-		Gui.drawRect(startX, top + 2, ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getProgress()), bottom - 2, (int) control.getProgressColor().getHexColor());
+		Gui.drawRect(startX, top + 2, MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getProgress()), bottom - 2, (int) control.getProgressColor().getHexColor());
 
 	}
 
