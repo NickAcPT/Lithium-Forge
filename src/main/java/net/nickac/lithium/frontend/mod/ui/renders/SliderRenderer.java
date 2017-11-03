@@ -35,6 +35,7 @@ import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.ui.ButtonRenderer;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.MiscUtils;
+import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
 /**
  * Created by NickAc for Lithium!
@@ -72,16 +73,21 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 
 	@Override
 	public void mouseClick(LSlider control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
-		LithiumMod.log("X: " + mouseX + "; Y: " + mouseY);
 
 		Point point = NewLithiumGUI.centerControl(control);
+		Point mouseLoc = new Point(mouseX, mouseY);
 
 		Rectangle rect = new Rectangle(point, control.getSize());
 
+		LithiumMod.log("X: " + mouseX + "; Y: " + mouseY);
 
 
+		if (rect.inflate(-1, -1).contains(mouseLoc)) {
+			LithiumMod.log("Click performed!");
+			ModCoderPackUtils.playButtonPressSound();
+		}
 
-		LithiumMod.log("Hovered: " + (mouseX >= rect.getLeft() && mouseY >= rect.getTop() && mouseX < rect.getRight() && mouseY < rect.getBottom()));
+
 	}
 
 	@Override

@@ -26,9 +26,12 @@
 package net.nickac.lithium.frontend.mod.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
@@ -81,18 +84,27 @@ public class ModCoderPackUtils {
 						0,
 						originalWidth,
 						0,
-						sr.getScaledHeight(),
+						sr.getScaledWidth(),
 						original.getX()
-				),
+				) * sr.getScaleFactor(),
 				MiscUtils.ConvertRange(
 						0,
 						originalHeight,
 						0,
 						sr.getScaledHeight(),
 						original.getY()
-				)
+				) * sr.getScaleFactor()
 		);
 
+	}
+
+	public static SoundHandler getSoundHandler() {
+		return getMinecraft().getSoundHandler();
+	}
+
+	public static void playButtonPressSound()
+	{
+		getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 	}
 
 	public static int getDisplayHeight() {

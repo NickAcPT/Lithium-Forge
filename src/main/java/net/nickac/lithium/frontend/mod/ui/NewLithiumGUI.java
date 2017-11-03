@@ -360,12 +360,10 @@ public class NewLithiumGUI extends GuiScreen {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
+		Point newPoint = ModCoderPackUtils.convertPointToScaled(new Point(mouseX, mouseY));
 
-		ScaledResolution sr = ModCoderPackUtils.getScaledResolution();
-		int factor = sr.getScaleFactor();
-
-		int newX = mouseX / factor;
-		int newY = mouseY / factor;
+		int newX = newPoint.getX();
+		int newY = newPoint.getY();
 
 		for (NickGuiTextField t : textBoxes.values()) t.mouseClicked(newX, newY, mouseButton);
 		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseClick(l, this, newX, newY, mouseButton);
