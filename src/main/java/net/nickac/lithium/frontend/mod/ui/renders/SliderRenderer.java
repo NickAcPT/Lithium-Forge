@@ -28,10 +28,11 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.nickac.lithium.backend.controls.impl.LSlider;
+import net.nickac.lithium.backend.other.LithiumConstants;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
-import net.nickac.lithium.frontend.mod.LithiumMod;
+import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.ButtonRenderer;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.MiscUtils;
@@ -73,26 +74,56 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 
 	@Override
 	public void mouseClick(LSlider control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
-
 		Point point = NewLithiumGUI.centerControl(control);
 		Point mouseLoc = new Point(mouseX, mouseY);
 
 		Rectangle rect = new Rectangle(point, control.getSize());
 
-		LithiumMod.log("X: " + mouseX + "; Y: " + mouseY);
-
-
-		if (rect.inflate(-1, -1).contains(mouseLoc)) {
-			LithiumMod.log("Click performed!");
+		if (rect.inflate(-2, -1).contains(mouseLoc)) {
+			Point clickedPoint = new Point(mouseX - rect.getX(), mouseY - rect.getY());
+			changeSlider(control, clickedPoint);
 			ModCoderPackUtils.playButtonPressSound();
 		}
+	}
 
-
+	public void changeSlider(LSlider control, Point clickedPoint) {
+		//Looks confusing, but let me explain...
+		//We turn the clicked position to relative coordinates...
+		//Then we convert them to a value on the slider
+		//Finally we "normalize" the value by respecting maximum an minimum value
+		control.setValue(
+				Math.max(
+						control.getMinValue(),
+						Math.min(
+								MiscUtils.ConvertRange(
+										1,
+										control.getSize().getWidth() - SLIDER_WIDTH,
+										control.getMinValue(),
+										control.getMaxValue(),
+										clickedPoint.getX()
+								),
+								control.getMaxValue()
+						)
+				)
+		);
+		ModCoderPackUtils.sendLithiumMessageToServer(
+				new LithiumMessage(
+						LithiumConstants.LITHIUM_SLIDER_VALUE_CHANGED + "|" + control.getUUID() + "|" + control.getValue()
+				)
+		);
 	}
 
 	@Override
 	public void mouseClickMove(LSlider control, GuiScreen gui, int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+		Point point = NewLithiumGUI.centerControl(control);
+		Point mouseLoc = new Point(mouseX, mouseY);
 
+		Rectangle rect = new Rectangle(point, control.getSize());
+
+		if (rect.inflate(-2, -1).contains(mouseLoc)) {
+			Point clickedPoint = new Point(mouseX - rect.getX(), mouseY - rect.getY());
+			changeSlider(control, clickedPoint);
+		}
 	}
 
 }
