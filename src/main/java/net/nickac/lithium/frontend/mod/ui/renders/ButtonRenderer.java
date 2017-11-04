@@ -1,4 +1,4 @@
-package net.nickac.lithium.frontend.mod.ui;
+package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;

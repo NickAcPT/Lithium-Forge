@@ -48,7 +48,7 @@ import java.util.UUID;
 public class LithiumMod {
 	public static final String MODID = "lithium";
 	public static final String CHANNELNAME = "Lithium";
-	public static final String VERSION = "0.2.1-BETA";
+	public static final String VERSION = "1.2-BETA";
 
 	private static LithiumWindowManager windowManager = new LithiumWindowManager();
 	private static NewLithiumGUI currentLithium;

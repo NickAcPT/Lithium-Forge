@@ -321,6 +321,32 @@ public class NewLithiumGUI extends GuiScreen {
 				gg.setProgressColor(gui.getProgressColor());
 			}
 			progressBars.remove(g.getUUID());
+		} else if (g.getClass().equals(LCheckBox.class)) {
+			LCheckBox gg = (LCheckBox) g;
+			LCheckBox gui = checkBoxes.getOrDefault(g.getUUID(), null);
+
+			if (gui != null) {
+				gg.setChecked(gui.isChecked());
+				gg.setCheckedColor(gui.getCheckedColor());
+				gg.setForeColor(gui.getForeColor());
+				gg.setInsideColor(gui.getInsideColor());
+				gg.setOutsideColor(gui.getOutsideColor());
+			}
+
+			checkBoxes.remove(g.getUUID());
+		} else if (g.getClass().equals(LSlider.class)) {
+			LSlider gg = (LSlider) g;
+			LSlider gui = sliders.getOrDefault(g.getUUID(), null);
+
+			if (gui != null) {
+				gg.setValue(gui.getValue());
+				gg.setMaxValue(gui.getMaxValue());
+				gg.setMinValue(gui.getMinValue());
+				gg.setBackgroundColor(gui.getBackgroundColor());
+				gg.setBorderColor(gui.getBorderColor());
+			}
+
+			sliders.remove(g.getUUID());
 		}
 	}
 

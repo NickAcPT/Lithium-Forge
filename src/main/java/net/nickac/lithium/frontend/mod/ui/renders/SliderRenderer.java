@@ -33,7 +33,6 @@ import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
-import net.nickac.lithium.frontend.mod.ui.ButtonRenderer;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.MiscUtils;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
@@ -55,8 +54,8 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		Gui.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getBorderColor().getHexColor());
 		Gui.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getBackgroundColor().getHexColor());
 
-		int startX = rect.getLeft();
-		int endX = rect.getRight() - SLIDER_WIDTH;
+		int startX = rect.getLeft() + 1;
+		int endX = rect.getRight() - SLIDER_WIDTH - 1;
 
 		//Then draw the handle
 		ButtonRenderer.drawButton(
@@ -87,6 +86,8 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 	}
 
 	public void changeSlider(LSlider control, Point clickedPoint) {
+		Rectangle rect = new Rectangle(control.getLocation(), control.getSize()).inflate(-2, -1);
+
 		//Looks confusing, but let me explain...
 		//We turn the clicked position to relative coordinates...
 		//Then we convert them to a value on the slider
@@ -97,10 +98,10 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 						Math.min(
 								MiscUtils.ConvertRange(
 										1,
-										control.getSize().getWidth() - SLIDER_WIDTH,
+										rect.getWidth() - SLIDER_WIDTH,
 										control.getMinValue(),
 										control.getMaxValue(),
-										clickedPoint.getX()
+										clickedPoint.getX() - 2
 								),
 								control.getMaxValue()
 						)
@@ -108,7 +109,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		);
 		ModCoderPackUtils.sendLithiumMessageToServer(
 				new LithiumMessage(
-						LithiumConstants.LITHIUM_SLIDER_VALUE_CHANGED + "|" + control.getUUID() + "|" + control.getValue()
+						LithiumConstants.LITHIUM_SLIDER_VALUE_CHANGED + control.getUUID() + "|" + control.getValue()
 				)
 		);
 	}
