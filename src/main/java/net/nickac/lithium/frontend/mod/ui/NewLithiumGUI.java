@@ -30,6 +30,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.*;
+import net.nickac.lithium.backend.other.objects.Dimension;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
@@ -198,6 +199,9 @@ public class NewLithiumGUI extends GuiScreen {
 		} else if (c.getClass().equals(LCheckBox.class)) {
 			checkBoxes.put(c.getUUID(), (LCheckBox) c);
 		} else if (c.getClass().equals(LSlider.class)) {
+			//Normalize slider height...
+			//Buttons have a max height of 20
+			c.setSize(new Dimension(c.getSize().getWidth(), Math.min(c.getSize().getHeight(), 20)));
 			sliders.put(c.getUUID(), (LSlider) c);
 		}
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {
