@@ -41,7 +41,7 @@ import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
  * Created by NickAc for Lithium!
  */
 public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScreen> {
-	private final int SLIDER_WIDTH = 10;
+	private final int HANDLE_LENGHT = 10;
 
 	@Override
 	public void renderLithiumControl(LSlider control, GuiScreen gui) {
@@ -54,20 +54,48 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		Gui.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getBorderColor().getHexColor());
 		Gui.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getBackgroundColor().getHexColor());
 
-		int startX = rect.getLeft() + 1;
-		int endX = rect.getRight() - SLIDER_WIDTH - 1;
+		int startX = 0;
+		int endX = 0;
+		switch (control.getSliderType()) {
+			case HORIZONTAL:
+				startX = rect.getLeft() + 1;
+				endX = rect.getRight() - HANDLE_LENGHT - 1;
+				break;
+			case VERTICAL:
+				startX = rect.getTop() + 1;
+				endX = rect.getBottom() - HANDLE_LENGHT - 1;
+				break;
+		}
 
+
+
+		switch (control.getSliderType()) {
+			case HORIZONTAL:
+				ButtonRenderer.drawButton(
+						gui,
+						"",
+						0,
+						0,
+						MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()),
+						rect.getY() + 1,
+						HANDLE_LENGHT,
+						rect.getHeight() - 3
+				);
+				break;
+			case VERTICAL:
+				ButtonRenderer.drawButton(
+						gui,
+						"",
+						0,
+						0,
+						rect.getX() + 1,
+						MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()),
+						rect.getWidth() - 3,
+						HANDLE_LENGHT
+				);
+				break;
+		}
 		//Then draw the handle
-		ButtonRenderer.drawButton(
-				gui,
-				"",
-				0,
-				0,
-				MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()),
-				rect.getY() + 1,
-				SLIDER_WIDTH,
-				rect.getHeight() - 3
-		);
 
 	}
 
@@ -98,7 +126,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 						Math.min(
 								MiscUtils.ConvertRange(
 										1,
-										rect.getWidth() - SLIDER_WIDTH,
+										rect.getWidth() - HANDLE_LENGHT,
 										control.getMinValue(),
 										control.getMaxValue(),
 										clickedPoint.getX() - 2
