@@ -77,12 +77,16 @@ public class LithiumWindowManager {
 
 	public void registerControl(LControl c) {
 		controls.put(c.getUUID(), c);
-		if (c instanceof LContainer) ((LContainer) c).getControls().forEach(this::registerControl);
+		if (c instanceof LContainer) {
+			((LContainer) c).getControls().forEach(this::registerControl);
+		}
 	}
 
 	public void removeControl(LControl c) {
 		controls.remove(c.getUUID());
-		if (c instanceof LContainer) ((LContainer) c).getControls().forEach(this::removeControl);
+		if (c instanceof LContainer) {
+			((LContainer) c).getControls().forEach(this::removeControl);
+		}
 		nativeControls.remove(c.getUUID());
 	}
 

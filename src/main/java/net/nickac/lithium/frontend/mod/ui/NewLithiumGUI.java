@@ -81,7 +81,9 @@ public class NewLithiumGUI extends GuiScreen {
 	private SliderRenderer sliderRenderer = new SliderRenderer();
 
 	public static Point centerControl(LControl c) {
-		Point parentLoc = (c.getParent() != null) && (c.getParent() instanceof LControl) && !(c.getParent() instanceof LWindow) ? centerControl((LControl) c.getParent()) : Point.EMPTY;
+		Point parentLoc = (c.getParent() != null)
+				&& (c.getParent() instanceof LControl)
+				&& !(c.getParent() instanceof LWindow) ? centerControl((LControl) c.getParent()) : Point.EMPTY;
 
 		if (c.getCentered() == LControl.CenterOptions.NONE) {
 			return new Point(parentLoc.getX() + c.getLocation().getX(), parentLoc.getY() + c.getLocation().getY());
@@ -103,10 +105,12 @@ public class NewLithiumGUI extends GuiScreen {
 
 		boolean centeredX = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.VERTICAL;
 		boolean centeredY = c.getCentered() != LControl.CenterOptions.NONE && c.getCentered() != LControl.CenterOptions.HORIZONTAL;
-		if (centeredX)
+		if (centeredX) {
 			newX = ((parentWidth / 2) - (sizeW / 2));
-		if (centeredY)
+		}
+		if (centeredY) {
 			newY = parentLoc.getY() + ((parentHeight / 2) - (sizeH / 2));
+		}
 		return new Point(newX, newY);
 	}
 
@@ -285,8 +289,9 @@ public class NewLithiumGUI extends GuiScreen {
 
 					//We should take any important data from the GUI control and move it to the LControl instance.
 					NickGuiTextField gui = textBoxes.getOrDefault(txtUUID, null);
-					if (gui != null)
+					if (gui != null) {
 						g.setText(gui.getText());
+					}
 
 					textBoxes.remove(txtUUID);
 				}
@@ -395,9 +400,15 @@ public class NewLithiumGUI extends GuiScreen {
 		int newX = newPoint.getX();
 		int newY = newPoint.getY();
 
-		for (NickGuiTextField t : textBoxes.values()) t.mouseClicked(newX, newY, mouseButton);
-		for (LCheckBox l : checkBoxes.values()) checkboxRenderer.mouseClick(l, this, newX, newY, mouseButton);
-		for (LSlider l : sliders.values()) sliderRenderer.mouseClick(l, this, newX, newY, mouseButton);
+		for (NickGuiTextField t : textBoxes.values()) {
+			t.mouseClicked(newX, newY, mouseButton);
+		}
+		for (LCheckBox l : checkBoxes.values()) {
+			checkboxRenderer.mouseClick(l, this, newX, newY, mouseButton);
+		}
+		for (LSlider l : sliders.values()) {
+			sliderRenderer.mouseClick(l, this, newX, newY, mouseButton);
+		}
 
 	}
 
@@ -407,8 +418,9 @@ public class NewLithiumGUI extends GuiScreen {
 
 		Point newPoint = ModCoderPackUtils.convertPointToScaled(new Point(mouseX, mouseY));
 
-		for (LSlider l : sliders.values())
+		for (LSlider l : sliders.values()) {
 			sliderRenderer.mouseClickMove(l, this, newPoint.getX(), newPoint.getY(), clickedMouseButton, timeSinceLastClick);
+		}
 	}
 
 	@Override
