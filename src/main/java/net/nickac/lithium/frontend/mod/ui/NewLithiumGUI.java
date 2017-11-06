@@ -205,7 +205,14 @@ public class NewLithiumGUI extends GuiScreen {
 		} else if (c.getClass().equals(LSlider.class)) {
 			//Normalize slider height...
 			//Buttons have a max height of 20
-			c.setSize(new Dimension(c.getSize().getWidth(), Math.min(c.getSize().getHeight(), 20)));
+			switch (((LSlider) c).getSliderType()) {
+				case HORIZONTAL:
+					c.setSize(new Dimension(c.getSize().getWidth(), Math.min(c.getSize().getHeight(), 20)));
+					break;
+				case VERTICAL:
+					c.setSize(new Dimension(Math.min(c.getSize().getWidth(), 20), c.getSize().getHeight()));
+					break;
+			}
 			sliders.put(c.getUUID(), (LSlider) c);
 		}
 		if (c.getParent() == null || (c.getParent() != null && c.getParent().equals(baseWindow))) {

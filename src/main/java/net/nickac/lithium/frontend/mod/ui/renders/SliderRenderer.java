@@ -90,7 +90,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 						0,
 						rect.getX() + 1,
 						MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()),
-						rect.getWidth() - 3,
+						rect.getWidth() - 2,
 						HANDLE_LENGHT
 				);
 				break;
@@ -120,16 +120,18 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		//We turn the clicked position to relative coordinates...
 		//Then we convert them to a value on the slider
 		//Finally we "normalize" the value by respecting maximum an minimum value
+		int val1 = (control.getSliderType() == LSlider.SliderType.HORIZONTAL) ? rect.getWidth() : rect.getHeight();
+		int val2 = (control.getSliderType() == LSlider.SliderType.HORIZONTAL) ? clickedPoint.getX() : clickedPoint.getY();
 		control.setValue(
 				Math.max(
 						control.getMinValue(),
 						Math.min(
 								MiscUtils.ConvertRange(
 										1,
-										rect.getWidth() - HANDLE_LENGHT,
+										val1 - HANDLE_LENGHT,
 										control.getMinValue(),
 										control.getMaxValue(),
-										clickedPoint.getX() - 2
+										val2 - 2
 								),
 								control.getMaxValue()
 						)
