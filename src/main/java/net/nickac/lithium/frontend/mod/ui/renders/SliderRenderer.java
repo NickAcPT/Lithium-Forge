@@ -41,7 +41,7 @@ import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
  * Created by NickAc for Lithium!
  */
 public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScreen> {
-	private final int HANDLE_LENGHT = 10;
+	private final int HANDLE_LENGHT = 8;
 
 	@Override
 	public void renderLithiumControl(LSlider control, GuiScreen gui) {
@@ -79,7 +79,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 						MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getValue()),
 						rect.getY() + 1,
 						HANDLE_LENGHT,
-						rect.getHeight() - 3
+						rect.getHeight() - 2
 				);
 				break;
 			case VERTICAL:

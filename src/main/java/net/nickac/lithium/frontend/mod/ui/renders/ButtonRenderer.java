@@ -25,8 +25,15 @@ public class ButtonRenderer {
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		gui.drawTexturedModalRect(x, y, 0, 46 + i * 20, width / 2, height);
-		gui.drawTexturedModalRect(x + width / 2, y, 200 - width / 2, 46 + i * 20, width / 2, height);
+
+		gui.drawTexturedModalRect(x, y, 0, 46 + i * 20, width / 2, ((int)Math.ceil(height  /2))); //LEFT TOP
+		gui.drawTexturedModalRect(x, y + (height / 2), 0, 46 + i * 20 + 20 - height  /2, width / 2, height / 2); //LEFT TOP
+
+		gui.drawTexturedModalRect(x + width / 2, y, 200 - width / 2, 46 + i * 20, width / 2, ((int)Math.ceil(height  /2))); //RIGHT TOP
+		gui.drawTexturedModalRect(x + width / 2, y + (height / 2), 200 - width / 2, 46 + i * 20 + 20 - height  /2, width / 2, height / 2); //RIGHT TOP
+
+
+		//gui.drawTexturedModalRect(x + width / 2, y, 200 - width / 2, 46 + i * 20, width / 2, height);
 
 		gui.drawCenteredString(fontrenderer, displayString, x + width / 2, y + (height - 8) / 2, j);
 	}
