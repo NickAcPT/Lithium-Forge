@@ -37,11 +37,11 @@ import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
  * Created by NickAc for Lithium!
  */
 public class EntityEventHandler {
-	public static final EntityEventHandler INSTANCE = new EntityEventHandler();
+	static final EntityEventHandler INSTANCE = new EntityEventHandler();
 
 	@SubscribeEvent
 	public void entityJoinWorld(EntityJoinWorldEvent event) {
-		//After Joining, we need to clear the suff because we are nice!
+		//After Joining, we need to clear the stuff because we are nice!
 		LithiumMod.setCurrentLithiumOverlay(null);
 		LithiumMod.getWindowManager().clear();
 		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage("Lithium|OK"));
