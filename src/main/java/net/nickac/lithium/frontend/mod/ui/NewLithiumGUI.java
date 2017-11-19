@@ -34,11 +34,9 @@ import net.nickac.lithium.backend.other.objects.Dimension;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
+import net.nickac.lithium.frontend.mod.managers.ImagesManager;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
-import net.nickac.lithium.frontend.mod.ui.renders.CheckBoxRenderer;
-import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRenderer;
-import net.nickac.lithium.frontend.mod.ui.renders.SliderRenderer;
-import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
+import net.nickac.lithium.frontend.mod.ui.renders.*;
 import net.nickac.lithium.frontend.mod.utils.MiscUtils;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
@@ -82,6 +80,7 @@ public class NewLithiumGUI extends GuiScreen {
 	private Map<Integer, Integer> reverseButtonsCounter = new HashMap<>();
 	private int globalCounter = 0;
 	private SliderRenderer sliderRenderer = new SliderRenderer();
+	private ImageRenderer imageRenderer = new ImageRenderer();
 
 	public static Point centerControl(LControl c) {
 		Point parentLoc = (c.getParent() != null)
@@ -207,6 +206,7 @@ public class NewLithiumGUI extends GuiScreen {
 			checkBoxes.put(c.getUUID(), (LCheckBox) c);
 		} else if (c.getClass().equals(LImage.class)) {
 			images.put(c.getUUID(), (LImage) c);
+			ImagesManager.handleImage((LImage) c);
 		} else if (c.getClass().equals(LSlider.class)) {
 			//Normalize slider height...
 			//Buttons have a max height of 20
@@ -460,6 +460,7 @@ public class NewLithiumGUI extends GuiScreen {
 		checkBoxes.values().forEach(c -> checkboxRenderer.renderLithiumControl(c, this));
 		progressBars.values().forEach(l -> progressBarRenderer.renderLithiumControl(l, this));
 		sliders.values().forEach(l -> sliderRenderer.renderLithiumControl(l, this));
+		images.values().forEach(l -> imageRenderer.renderLithiumControl(l, this));
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
