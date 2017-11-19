@@ -35,7 +35,7 @@ import net.nickac.lithium.backend.controls.impl.LProgressBar;
 import net.nickac.lithium.backend.controls.impl.LTextLabel;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.LithiumMod;
-import net.nickac.lithium.frontend.mod.managers.ImagesManager;
+import net.nickac.lithium.frontend.mod.managers.ImageManager;
 import net.nickac.lithium.frontend.mod.ui.renders.ImageRenderer;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRenderer;
 import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
@@ -58,8 +58,8 @@ public class LithiumOverlay extends GuiScreen {
 							renderer = new TextLabelRenderer();
 						} else if (lControl.getClass().equals(LImage.class)) {
 							renderer = new ImageRenderer();
-							if (!ImagesManager.isImageHandled((LImage) lControl)) {
-								ImagesManager.handleImage((LImage) lControl);
+							if (!ImageManager.isImageHandled((LImage) lControl)) {
+								ImageManager.handleImage((LImage) lControl);
 							}
 						}
 

@@ -34,7 +34,7 @@ import net.nickac.lithium.backend.other.objects.Dimension;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.serializer.SerializationUtils;
 import net.nickac.lithium.frontend.mod.LithiumMod;
-import net.nickac.lithium.frontend.mod.managers.ImagesManager;
+import net.nickac.lithium.frontend.mod.managers.ImageManager;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.renders.*;
 import net.nickac.lithium.frontend.mod.utils.MiscUtils;
@@ -206,7 +206,7 @@ public class NewLithiumGUI extends GuiScreen {
 			checkBoxes.put(c.getUUID(), (LCheckBox) c);
 		} else if (c.getClass().equals(LImage.class)) {
 			images.put(c.getUUID(), (LImage) c);
-			ImagesManager.handleImage((LImage) c);
+			ImageManager.handleImage((LImage) c);
 		} else if (c.getClass().equals(LSlider.class)) {
 			//Normalize slider height...
 			//Buttons have a max height of 20
@@ -374,6 +374,17 @@ public class NewLithiumGUI extends GuiScreen {
 			}
 
 			sliders.remove(g.getUUID());
+
+		} else if (g.getClass().equals(LImage.class)) {
+			LImage gg = (LImage) g;
+			LImage gui = images.getOrDefault(g.getUUID(), null);
+
+			if (gui != null) {
+				gg.setDisplayOption(gui.getDisplayOption());
+				gg.setImageURL(gui.getImageURL());
+			}
+
+			images.remove(g.getUUID());
 
 		}
 	}

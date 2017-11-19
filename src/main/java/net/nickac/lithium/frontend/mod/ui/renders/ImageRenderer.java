@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.nickac.lithium.backend.controls.impl.LImage;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
-import net.nickac.lithium.frontend.mod.managers.ImagesManager;
+import net.nickac.lithium.frontend.mod.managers.ImageManager;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
@@ -21,7 +21,7 @@ public class ImageRenderer implements ILithiumControlRenderer<LImage, GuiScreen>
 	public void renderLithiumControl(LImage control, GuiScreen gui) {
 		Point loc = NewLithiumGUI.centerControl(control);
 
-		DynamicTexture imageTexture = ImagesManager.getDynamicTexture(control);
+		DynamicTexture imageTexture = ImageManager.getDynamicTexture(control);
 		TextureManager textureManager = ModCoderPackUtils.getTextureManager();
 
 		imageTexture.updateDynamicTexture();

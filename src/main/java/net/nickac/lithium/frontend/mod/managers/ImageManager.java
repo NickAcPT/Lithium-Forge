@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Created by NickAc for Lithium!
  */
-public class ImagesManager {
+public class ImageManager {
 
 	private static NickHashMap<UUID, DynamicTexture> bufferedImages = new NickHashMap<>();
 	private static List<UUID> handledControls = new ArrayList<>();
