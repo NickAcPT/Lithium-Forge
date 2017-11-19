@@ -29,11 +29,14 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.nickac.lithium.backend.controls.LControl;
+import net.nickac.lithium.backend.controls.impl.LImage;
 import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.backend.controls.impl.LProgressBar;
 import net.nickac.lithium.backend.controls.impl.LTextLabel;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.LithiumMod;
+import net.nickac.lithium.frontend.mod.managers.ImagesManager;
+import net.nickac.lithium.frontend.mod.ui.renders.ImageRenderer;
 import net.nickac.lithium.frontend.mod.ui.renders.ProgressBarRenderer;
 import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
 
@@ -53,6 +56,11 @@ public class LithiumOverlay extends GuiScreen {
 							renderer = new ProgressBarRenderer();
 						} else if (lControl.getClass().equals(LTextLabel.class)) {
 							renderer = new TextLabelRenderer();
+						} else if (lControl.getClass().equals(LImage.class)) {
+							renderer = new ImageRenderer();
+							if (!ImagesManager.isImageHandled((LImage) lControl)) {
+								ImagesManager.handleImage((LImage) lControl);
+							}
 						}
 
 						if (renderer != null) {

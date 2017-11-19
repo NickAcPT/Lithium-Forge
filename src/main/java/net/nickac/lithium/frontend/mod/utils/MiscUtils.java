@@ -51,4 +51,12 @@ public class MiscUtils {
 		double scale = (double) (newEnd - newStart) / (originalEnd - originalStart);
 		return (int) (newStart + ((value - originalStart) * scale));
 	}
+
+	public static String getURLFileExt(String url) {
+		if (url.contains(".")) {
+			return url.substring(url.lastIndexOf("."));
+		}
+		return "";
+
+	}
 }

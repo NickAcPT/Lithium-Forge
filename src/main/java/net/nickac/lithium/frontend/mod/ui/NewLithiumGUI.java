@@ -61,6 +61,7 @@ public class NewLithiumGUI extends GuiScreen {
 	private static TextLabelRenderer textLabelRenderer = new TextLabelRenderer();
 	@SuppressWarnings("FieldCanBeLocal")
 	private final int BUTTON_HEIGHT = 20;
+
 	//The base window
 	private LWindow baseWindow;
 	private Map<UUID, NickGuiTextField> textBoxes = new HashMap<>();
@@ -69,7 +70,9 @@ public class NewLithiumGUI extends GuiScreen {
 	private Map<UUID, LProgressBar> progressBars = new NickHashMap<>();
 	private Map<UUID, LCheckBox> checkBoxes = new NickHashMap<>();
 	private Map<UUID, LSlider> sliders = new NickHashMap<>();
+	private Map<UUID, LImage> images = new NickHashMap<>();
 	private List<LTextLabel> labels = new ArrayList<>();
+
 	//Button stuff
 	//We take a global count number and give a Lithium button
 	private Map<Integer, LButton> buttonsCounter = new HashMap<>();
@@ -202,6 +205,8 @@ public class NewLithiumGUI extends GuiScreen {
 			progressBars.put(c.getUUID(), (LProgressBar) c);
 		} else if (c.getClass().equals(LCheckBox.class)) {
 			checkBoxes.put(c.getUUID(), (LCheckBox) c);
+		} else if (c.getClass().equals(LImage.class)) {
+			images.put(c.getUUID(), (LImage) c);
 		} else if (c.getClass().equals(LSlider.class)) {
 			//Normalize slider height...
 			//Buttons have a max height of 20
@@ -303,6 +308,7 @@ public class NewLithiumGUI extends GuiScreen {
 					textBoxes.remove(txtUUID);
 				}
 			}
+
 		} else if (g.getClass().equals(LButton.class)) {
 			for (GuiButton guiButton : buttonList) {
 				if (guiButton.id == reverseLButtonsCounter.get(g.getUUID())) {
@@ -314,6 +320,7 @@ public class NewLithiumGUI extends GuiScreen {
 					break;
 				}
 			}
+
 		} else if (g.getClass().equals(LTextLabel.class)) {
 			for (LTextLabel lTextLabel : labels) {
 				if (lTextLabel.getUUID().equals(g.getUUID())) {
@@ -321,9 +328,11 @@ public class NewLithiumGUI extends GuiScreen {
 					break;
 				}
 			}
+
 		} else if (g.getClass().equals(LPanel.class)) {
 			LPanel p = (LPanel) g;
 			p.getControls().forEach(this::softRemoveControl);
+
 		} else if (g.getClass().equals(LProgressBar.class)) {
 			LProgressBar gg = (LProgressBar) g;
 			LProgressBar gui = progressBars.getOrDefault(g.getUUID(), null);
@@ -337,6 +346,7 @@ public class NewLithiumGUI extends GuiScreen {
 				gg.setProgressColor(gui.getProgressColor());
 			}
 			progressBars.remove(g.getUUID());
+
 		} else if (g.getClass().equals(LCheckBox.class)) {
 			LCheckBox gg = (LCheckBox) g;
 			LCheckBox gui = checkBoxes.getOrDefault(g.getUUID(), null);
@@ -350,6 +360,7 @@ public class NewLithiumGUI extends GuiScreen {
 			}
 
 			checkBoxes.remove(g.getUUID());
+
 		} else if (g.getClass().equals(LSlider.class)) {
 			LSlider gg = (LSlider) g;
 			LSlider gui = sliders.getOrDefault(g.getUUID(), null);
@@ -363,6 +374,7 @@ public class NewLithiumGUI extends GuiScreen {
 			}
 
 			sliders.remove(g.getUUID());
+
 		}
 	}
 

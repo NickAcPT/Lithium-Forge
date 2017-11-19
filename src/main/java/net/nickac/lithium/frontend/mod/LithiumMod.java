@@ -25,10 +25,12 @@
 
 package net.nickac.lithium.frontend.mod;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,10 +38,10 @@ import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.frontend.mod.events.NetworkEventHandler;
+import net.nickac.lithium.frontend.mod.managers.LithiumWindowManager;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
 import net.nickac.lithium.frontend.mod.ui.LithiumOverlay;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
-import net.nickac.lithium.frontend.mod.utils.LithiumWindowManager;
 
 import java.util.UUID;
 
@@ -54,7 +56,8 @@ public class LithiumMod {
 	private static NewLithiumGUI currentLithium;
 	private static LOverlay currentLithiumOverlay;
 	private static SimpleNetworkWrapper network;
-	private LithiumOverlay overlayRenderer;
+	private static LithiumOverlay overlayRenderer;
+	private static ResourceLocation mainResourceLocation;
 
 	public static LOverlay getCurrentLithiumOverlay() {
 		return currentLithiumOverlay;
@@ -103,6 +106,16 @@ public class LithiumMod {
 
 	public static SimpleNetworkWrapper getSimpleNetworkWrapper() {
 		return network;
+	}
+
+	public static ResourceLocation getMainResourceLocation() {
+		return mainResourceLocation;
+	}
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		mainResourceLocation = new ResourceLocation(event.getModConfigurationDirectory() + "/lithium/images/");
+
 	}
 
 	@EventHandler

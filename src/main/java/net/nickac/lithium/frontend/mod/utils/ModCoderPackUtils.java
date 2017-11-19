@@ -31,6 +31,8 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.nickac.lithium.backend.other.objects.Point;
@@ -113,6 +115,14 @@ public class ModCoderPackUtils {
 
 	public static int getDisplayWidth() {
 		return getMinecraft().displayWidth;
+	}
+
+	public static TextureManager getTextureManager() {
+		return getMinecraft().getTextureManager();
+	}
+
+	public static Tessellator getTesselator() {
+		return Tessellator.getInstance();
 	}
 
 }

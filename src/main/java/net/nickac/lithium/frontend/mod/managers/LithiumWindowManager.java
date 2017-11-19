@@ -23,7 +23,7 @@
  *
  */
 
-package net.nickac.lithium.frontend.mod.utils;
+package net.nickac.lithium.frontend.mod.managers;
 
 import net.minecraft.client.gui.Gui;
 import net.nickac.lithium.backend.controls.LContainer;
