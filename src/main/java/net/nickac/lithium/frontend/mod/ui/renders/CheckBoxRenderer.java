@@ -54,13 +54,20 @@ public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiS
 
 	@Override
 	public void renderLithiumControl(LCheckBox control, GuiScreen gui) {
+		//Get the outer most rectangle
 		Rectangle rect = getCheckBoxRect(control);
+		//Get the inside rectangle
 		Rectangle rect2 = getCheckBoxRect(control).inflate(-1, -1);
+		//Get the check rectangle
 		Rectangle rect3 = getCheckBoxRect(control).inflate(-3, -3);
-		//TODO: Allow color change
+		//Draw outside rectangle
 		GuiScreen.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getOutsideColor().getHexColor());
+		//Draw inside rect
 		GuiScreen.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getInsideColor().getHexColor());
+		//Draw the string of the text
 		ModCoderPackUtils.getFontRenderer().drawString(control.getText(), rect2.getRight() + PADDING, rect2.getTop() + PADDING / 2, (int) control.getForeColor().getHexColor());
+
+		//If the checkbox is checked, render the check rectangle
 		if (control.isChecked()) {
 			GuiScreen.drawRect(rect3.getLeft(), rect3.getTop(), rect3.getRight(), rect3.getBottom(), (int) control.getCheckedColor().getHexColor());
 		}

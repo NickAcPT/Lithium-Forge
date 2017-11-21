@@ -21,12 +21,17 @@ public class ImageRenderer implements ILithiumControlRenderer<LImage, GuiScreen>
 	public void renderLithiumControl(LImage control, GuiScreen gui) {
 		Point loc = NewLithiumGUI.centerControl(control);
 
+		//Ask ImageManager to give us a dynamic texture
 		DynamicTexture imageTexture = ImageManager.getDynamicTexture(control);
 		if (imageTexture != null) {
+			//Get Minecraft's texture manager
 			TextureManager textureManager = ModCoderPackUtils.getTextureManager();
 
+			//Bind the texture. (In other words, tell Minecraft to use this texture)
 			textureManager.bindTexture(textureManager.getDynamicTextureLocation(control.getUUID().toString(), imageTexture));
+			//Correct colors
 			GlStateManager.color(1, 1, 1, 1);
+			//Draw the image to the screen
 			Gui.drawModalRectWithCustomSizedTexture(loc.getX(), loc.getY(), 0.0F, 0.0F, control.getSize().getWidth(), control.getSize().getHeight(), control.getSize().getWidth(), control.getSize().getHeight());
 		}
 	}

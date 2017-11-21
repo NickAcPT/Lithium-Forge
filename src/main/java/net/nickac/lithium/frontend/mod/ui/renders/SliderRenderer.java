@@ -50,12 +50,14 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		Rectangle rect = new Rectangle(loc.getX(), loc.getY(), control.getSize().getWidth(), control.getSize().getHeight());
 		Rectangle rect2 = rect.inflate(-1, -1);
 
-		//Draw border and then inside
+		//Draw border
 		Gui.drawRect(rect.getLeft(), rect.getTop(), rect.getRight(), rect.getBottom(), (int) control.getBorderColor().getHexColor());
+		//Draw inside of the control
 		Gui.drawRect(rect2.getLeft(), rect2.getTop(), rect2.getRight(), rect2.getBottom(), (int) control.getBackgroundColor().getHexColor());
 
 		int startX = 0;
 		int endX = 0;
+		//Do some MATH to correctly render the slider
 		switch (control.getSliderType()) {
 			case HORIZONTAL:
 				startX = rect.getLeft() + 1;
@@ -67,10 +69,10 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 				break;
 		}
 
-
-
 		switch (control.getSliderType()) {
 			case HORIZONTAL:
+
+				//Render stuff
 				ButtonRenderer.drawButton(
 						gui,
 						"",
@@ -83,6 +85,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 				);
 				break;
 			case VERTICAL:
+				//Render stuff
 				ButtonRenderer.drawButton(
 						gui,
 						"",
@@ -95,7 +98,6 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 				);
 				break;
 		}
-		//Then draw the handle
 
 	}
 

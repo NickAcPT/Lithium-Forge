@@ -47,12 +47,15 @@ public class ProgressBarRenderer implements ILithiumControlRenderer<LProgressBar
 		int right = left + control.getSize().getWidth();
 		int bottom = top + control.getSize().getHeight();
 
+		//Render outside of the progressbar
 		Gui.drawRect(left, top, right, bottom, (int) control.getBorderColor().getHexColor());
+		//Draw the inside of the progressbar
 		Gui.drawRect(left + 1, top + 1, right - 1, bottom - 1, (int) control.getInsideColor().getHexColor());
 
 		int startX = left + 2;
 		int endX = right - 2;
 
+		//Calculate the size of the progress and fill it
 		Gui.drawRect(startX, top + 2, MiscUtils.ConvertRange(control.getMinValue(), control.getMaxValue(), startX, endX, control.getProgress()), bottom - 2, (int) control.getProgressColor().getHexColor());
 	}
 
