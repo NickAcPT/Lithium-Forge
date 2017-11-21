@@ -466,12 +466,12 @@ public class NewLithiumGUI extends GuiScreen {
 		textBoxes.values().forEach(NickGuiTextField::drawTextBox);
 
 
-		//Then we render the labels
-		labels.forEach(l -> textLabelRenderer.renderLithiumControl(l, this));
+		//Then we render all the other stuff
+		images.values().forEach(l -> imageRenderer.renderLithiumControl(l, this));
 		checkBoxes.values().forEach(c -> checkboxRenderer.renderLithiumControl(c, this));
 		progressBars.values().forEach(l -> progressBarRenderer.renderLithiumControl(l, this));
 		sliders.values().forEach(l -> sliderRenderer.renderLithiumControl(l, this));
-		images.values().forEach(l -> imageRenderer.renderLithiumControl(l, this));
+		labels.forEach(l -> textLabelRenderer.renderLithiumControl(l, this));
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

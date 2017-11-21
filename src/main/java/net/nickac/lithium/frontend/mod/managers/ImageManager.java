@@ -2,6 +2,7 @@ package net.nickac.lithium.frontend.mod.managers;
 
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.nickac.lithium.backend.controls.impl.LImage;
+import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
 
 import javax.imageio.ImageIO;
@@ -33,9 +34,13 @@ public class ImageManager {
 			return;
 		}
 		try {
+			LithiumMod.log("Loading image for control with UUID[" + img.getUUID() + "].");
 			handledControls.add(img.getUUID());
 			bufferedImages.put(img.getUUID(), new DynamicTexture(ImageIO.read(new URL(img.getImageURL()))));
+			LithiumMod.log("Finished loading image for control with UUID[" + img.getUUID() + "].");
+
 		} catch (IOException e) {
+			LithiumMod.log("An error occured while trying to load image for control with UUID[" + img.getUUID() + "].");
 			e.printStackTrace();
 		}
 	}

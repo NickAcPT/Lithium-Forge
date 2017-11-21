@@ -22,13 +22,13 @@ public class ImageRenderer implements ILithiumControlRenderer<LImage, GuiScreen>
 		Point loc = NewLithiumGUI.centerControl(control);
 
 		DynamicTexture imageTexture = ImageManager.getDynamicTexture(control);
-		TextureManager textureManager = ModCoderPackUtils.getTextureManager();
+		if (imageTexture != null) {
+			TextureManager textureManager = ModCoderPackUtils.getTextureManager();
 
-		imageTexture.updateDynamicTexture();
-		textureManager.bindTexture(textureManager.getDynamicTextureLocation(control.getUUID().toString(), imageTexture));
-		GlStateManager.color(1, 1, 1, 1);
-		Gui.drawModalRectWithCustomSizedTexture(loc.getX(), loc.getY(), 0.0F, 0.0F, control.getSize().getWidth(), control.getSize().getHeight(), control.getSize().getWidth(), control.getSize().getHeight());
-
+			textureManager.bindTexture(textureManager.getDynamicTextureLocation(control.getUUID().toString(), imageTexture));
+			GlStateManager.color(1, 1, 1, 1);
+			Gui.drawModalRectWithCustomSizedTexture(loc.getX(), loc.getY(), 0.0F, 0.0F, control.getSize().getWidth(), control.getSize().getHeight(), control.getSize().getWidth(), control.getSize().getHeight());
+		}
 	}
 
 	@Override

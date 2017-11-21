@@ -52,16 +52,17 @@ public class LithiumOverlay extends GuiScreen {
 				if (o.getControls() != null) {
 					for (LControl lControl : o.getControls()) {
 						ILithiumControlRenderer renderer = null;
-						if (lControl.getClass().equals(LProgressBar.class)) {
-							renderer = new ProgressBarRenderer();
-						} else if (lControl.getClass().equals(LTextLabel.class)) {
-							renderer = new TextLabelRenderer();
-						} else if (lControl.getClass().equals(LImage.class)) {
+						if (lControl.getClass().equals(LImage.class)) {
 							renderer = new ImageRenderer();
 							if (!ImageManager.isImageHandled((LImage) lControl)) {
 								ImageManager.handleImage((LImage) lControl);
 							}
+						} else if (lControl.getClass().equals(LProgressBar.class)) {
+							renderer = new ProgressBarRenderer();
+						} else if (lControl.getClass().equals(LTextLabel.class)) {
+							renderer = new TextLabelRenderer();
 						}
+
 
 						if (renderer != null) {
 							renderer.renderLithiumControl(lControl, this);
