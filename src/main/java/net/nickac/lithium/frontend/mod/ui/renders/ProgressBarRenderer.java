@@ -27,6 +27,8 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.impl.LProgressBar;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
@@ -38,6 +40,7 @@ import net.nickac.lithium.frontend.mod.utils.MiscUtils;
  */
 public class ProgressBarRenderer implements ILithiumControlRenderer<LProgressBar, GuiScreen> {
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderLithiumControl(LProgressBar control, GuiScreen gui) {
 		Point loc = NewLithiumGUI.centerControl(control);

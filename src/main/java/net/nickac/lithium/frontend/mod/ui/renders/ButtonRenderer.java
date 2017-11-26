@@ -4,6 +4,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
 /**
@@ -16,6 +18,7 @@ public class ButtonRenderer {
 	/**
 	 * Draws this button to the screen.
 	 */
+	@SideOnly(Side.CLIENT)
 	public static void drawButton(GuiScreen gui, String displayString, int mouseX, int mouseY, int x, int y, int width, int height) {
 		int i = 1; //Hover state
 		int j = 14737632; // ?

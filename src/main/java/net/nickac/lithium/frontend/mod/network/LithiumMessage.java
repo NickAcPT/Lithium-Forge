@@ -42,6 +42,8 @@ import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static net.nickac.lithium.backend.other.LithiumConstants.*;
@@ -55,7 +57,9 @@ public class LithiumMessage implements IMessage {
 
 	private String text;
 
-	public LithiumMessage() {
+	// used for reflective Instantiation
+	public LithiumMessage(){
+
 	}
 
 	public LithiumMessage(String text) {
@@ -80,110 +84,5 @@ public class LithiumMessage implements IMessage {
 		ByteBufUtils.writeUTF8String(buf, text);
 	}
 
-	public static class Handle implements IMessageHandler<LithiumMessage, IMessage> {
-
-		@SideOnly(Side.CLIENT)
-		@Override
-		public IMessage onMessage(LithiumMessage message, MessageContext ctx) {
-			//TODO: Handle all other stuff
-			String receivedMessage = message.text.trim();
-			//System.out.println(String.format("Received %s.", message.text.trim()));
-			if (receivedMessage.startsWith(TO_CLIENT.RECEIVE_WINDOW)) {
-				String w = receivedMessage.substring(TO_CLIENT.RECEIVE_WINDOW.length());
-
-				LWindow receivedWindow = SerializationUtils.stringToObject(w, LWindow.class);
-
-				if (receivedWindow != null) {
-					ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(TO_SERVER.WINDOW_OPEN + receivedWindow.getUUID()));
-					Minecraft.getMinecraft().addScheduledTask(() -> {
-						NewLithiumGUI gui = new NewLithiumGUI(receivedWindow);
-						Minecraft.getMinecraft().displayGuiScreen(gui);
-					});
-
-				}
-			} else if (receivedMessage.startsWith(TO_CLIENT.CONTROL_CHANGED)) {
-				String c = receivedMessage.substring(TO_CLIENT.CONTROL_CHANGED.length());
-				LControl newC = SerializationUtils.stringToObject(c, LControl.class);
-
-				if (newC.getParent() != null) {
-					Minecraft.getMinecraft().addScheduledTask(() -> LithiumMod.replaceControl(newC.getParent(), newC.getUUID(), newC));
-				}
-				/*
-				if (LithiumMod.getCurrentLithium() != null && newC != null) {
-					LithiumMod.replaceControl(LithiumMod.getCurrentLithium().getBaseWindow(), newC.getUUID(), newC);
-				}*/
-
-			} else if (receivedMessage.equals(TO_CLIENT.CLOSE_WINDOW)) {
-				Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().displayGuiScreen(null));
-			} else if (receivedMessage.startsWith(TO_CLIENT.ADD_TO_CONTAINER)) {
-				String w = receivedMessage.substring(TO_CLIENT.ADD_TO_CONTAINER.length());
-				String[] split = w.split("\\|");
-
-				try {
-					//Deserialize the control
-					LControl newC = SerializationUtils.stringToObject(split[1], LControl.class);
-
-					UUID uuid = UUID.fromString(split[0]);
-					LControl l = LithiumMod.getWindowManager().getControlById(uuid);
-					if (l != null) {
-						//Check if it is a container
-						if (l instanceof LContainer) {
-							((LContainer) l).addControl(newC);
-							if (LithiumMod.getCurrentLithium() != null) {
-								//Lets try adding this control.
-								//It might work...
-								LithiumMod.getCurrentLithium().addControlToGUI(newC);
-							}
-						}
-					} else {
-						//It might be a window....
-						LWindow window = LithiumMod.getWindowManager().getWindowById(uuid);
-						if (window != null) {
-							window.addControl(newC);
-							if (LithiumMod.getCurrentLithium() != null &&
-									LithiumMod.getCurrentLithium().getBaseWindow().getUUID().equals(uuid)) {
-								LithiumMod.getCurrentLithium().addControlToGUI(newC);
-							}
-						}
-
-					}
-
-				} catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ex) {
-					LithiumMod.log("Received malformed packet from server. Ignoring!");
-				}
-			} else if (receivedMessage.startsWith(TO_CLIENT.REMOVE_FROM_CONTAINER)) {
-				String w = receivedMessage.substring(TO_CLIENT.REMOVE_FROM_CONTAINER.length());
-				String[] split = w.split("\\|");
-
-				UUID containerUUID = UUID.fromString(split[0]);
-				UUID controlUUID = UUID.fromString(split[1]);
-
-
-				LControl container = LithiumMod.getWindowManager().getControlById(containerUUID);
-				if (container != null) {
-					if (container instanceof LContainer && LithiumMod.getCurrentLithium() != null) {
-						LControl toRemove = LithiumMod.getWindowManager().getControlById(controlUUID);
-						if (toRemove != null) {
-							LithiumMod.getCurrentLithium().removeControl(toRemove);
-						}
-					}
-				}
-
-			} else if (receivedMessage.startsWith(TO_CLIENT.SHOW_OVERLAY)) {
-				try {
-					String w = receivedMessage.substring(TO_CLIENT.SHOW_OVERLAY.length());
-					LOverlay overlay = SerializationUtils.stringToObject(w, LOverlay.class);
-					LithiumMod.setCurrentLithiumOverlay(overlay);
-				} catch (Exception e) {
-					LithiumMod.log("An error occured while creating an overlay.");
-					LithiumMod.log("Please send this to a Lithium Developer:");
-					LithiumMod.log("*" + SerializationUtils.objectToString(e.toString()) + "*");
-				}
-			}
-
-			//System.out.println(String.format("Received %s.", message.text.trim()));
-			return null;
-		}
-	}
 
 }

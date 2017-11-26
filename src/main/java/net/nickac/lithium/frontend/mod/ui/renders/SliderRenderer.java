@@ -35,6 +35,7 @@ import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.network.packethandler.out.SliderValueChanged;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.MiscUtils;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
@@ -143,11 +144,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 						)
 				)
 		);
-		ModCoderPackUtils.sendLithiumMessageToServer(
-				new LithiumMessage(
-						LithiumConstants.TO_SERVER.SLIDER_VALUE_CHANGED + control.getUUID() + "|" + control.getValue()
-				)
-		);
+		ModCoderPackUtils.sendLithiumMessageToServer(new SliderValueChanged(control));
 	}
 
 	@SideOnly(Side.CLIENT)

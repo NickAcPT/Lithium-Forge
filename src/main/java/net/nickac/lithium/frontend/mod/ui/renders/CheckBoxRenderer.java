@@ -34,6 +34,7 @@ import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.network.packethandler.out.ToggleAction;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
@@ -84,7 +85,7 @@ public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiS
 		if (rect.contains(new Point(mouseX, mouseY))) {
 			control.setChecked(!control.isChecked());
 			//Here, we risk having a desync from the server, but I'll try my best to sync it.
-			ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LithiumConstants.TO_SERVER.TOGGLE_ACTION + control.getUUID()));
+			ModCoderPackUtils.sendLithiumMessageToServer(new ToggleAction(control));
 		}
 	}
 
