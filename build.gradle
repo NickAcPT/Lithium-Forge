@@ -1,8 +1,7 @@
-
-
 buildscript {
     repositories {
         jcenter()
+
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
@@ -34,8 +33,21 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+repositories{
+    mavenLocal()
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+
 dependencies {
-    compile project(':Backend')
+
+
+    shade group:"net.nickac.lithium", name: "Backend", version: "1.0"
+
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -77,5 +89,14 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+            // you may exclude other things here if you want, or maybe copy the META-INF
+        }
     }
 }

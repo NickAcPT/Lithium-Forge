@@ -27,6 +27,8 @@ package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.impl.LSlider;
 import net.nickac.lithium.backend.other.LithiumConstants;
 import net.nickac.lithium.backend.other.objects.Point;
@@ -43,6 +45,7 @@ import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScreen> {
 	private final int HANDLE_LENGHT = 8;
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderLithiumControl(LSlider control, GuiScreen gui) {
 		Point loc = NewLithiumGUI.centerControl(control);
@@ -101,6 +104,7 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void mouseClick(LSlider control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
 		Point point = NewLithiumGUI.centerControl(control);
@@ -141,11 +145,12 @@ public class SliderRenderer implements ILithiumControlRenderer<LSlider, GuiScree
 		);
 		ModCoderPackUtils.sendLithiumMessageToServer(
 				new LithiumMessage(
-						LithiumConstants.LITHIUM_SLIDER_VALUE_CHANGED + control.getUUID() + "|" + control.getValue()
+						LithiumConstants.TO_SERVER.SLIDER_VALUE_CHANGED + control.getUUID() + "|" + control.getValue()
 				)
 		);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void mouseClickMove(LSlider control, GuiScreen gui, int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		Point point = NewLithiumGUI.centerControl(control);

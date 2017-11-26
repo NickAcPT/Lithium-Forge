@@ -242,7 +242,7 @@ public class NewLithiumGUI extends GuiScreen {
 					if (lTextBox != null) {
 						ModCoderPackUtils.sendLithiumMessageToServer(
 								new LithiumMessage(
-										LITHIUM_TEXTBOX_TEXT_CHANGED
+										TO_SERVER.TEXTBOX_TEXT_CHANGED
 												+ lTextBox.getUUID()
 												+ "|"
 												+ SerializationUtils.objectToString(t.getText())
@@ -395,7 +395,7 @@ public class NewLithiumGUI extends GuiScreen {
 		//We can unregister the window, because everything has an UUID, and it wouldn't make sense to reuse a window or its controls.
 		LithiumMod.getWindowManager().unregisterWindow(baseWindow);
 		//Then we need to the server that the window was closed (event)
-		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LITHIUM_WINDOW_CLOSE + baseWindow.getUUID()));
+		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(TO_SERVER.WINDOW_CLOSE + baseWindow.getUUID()));
 		//Then, we can "safely" set the current LithiumGUI to null.
 		LithiumMod.setCurrentLithium(null);
 	}
@@ -416,7 +416,7 @@ public class NewLithiumGUI extends GuiScreen {
 		//Later, it will invoke an event on the spigot side.
 		if (buttonId != -1) {
 			ModCoderPackUtils.sendLithiumMessageToServer(
-					new LithiumMessage(LITHIUM_BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID())
+					new LithiumMessage(TO_SERVER.BUTTON_ACTION + buttonsCounter.get(buttonId).getUUID())
 			);
 		}
 	}
