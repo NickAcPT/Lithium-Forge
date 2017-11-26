@@ -28,9 +28,6 @@ public class Handle implements IMessageHandler<LithiumMessage, IMessage> {
         String[] msgArray = receivedMessage.split("\\|");
         String key = msgArray[0];
 
-
-
-
         List<String> data = new ArrayList<>();
 
         if(msgArray.length>1){
