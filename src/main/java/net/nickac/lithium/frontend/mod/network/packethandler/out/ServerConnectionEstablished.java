@@ -9,7 +9,7 @@ import java.util.List;
 public class ServerConnectionEstablished implements PacketOut {
     @Override
     public List<String> execute() {
-        return Arrays.asList(key());
+        return Arrays.asList(key(),String.valueOf(LithiumConstants.VERSION));
     }
 
     @Override
