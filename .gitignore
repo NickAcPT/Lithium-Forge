@@ -1,6 +1,4 @@
 # Compiled class file
-*.class
-
 # Log file
 # BlueJ files
 *.ctxt
@@ -25,4 +23,4 @@ gradlew.bat
 build
 *.iml
 gradle/
-production/
+classes/
