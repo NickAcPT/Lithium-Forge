@@ -44,6 +44,7 @@ public class TextLabelRenderer implements ILithiumControlRenderer<LTextLabel, Gu
 	public void renderLithiumControl(LTextLabel control, GuiScreen gui) {
 		Point loc = NewLithiumGUI.centerControl(control);
 		//Render text on screen
+
 		gui.drawString(ModCoderPackUtils.getFontRenderer(), control.getText(), loc.getX(), loc.getY(), (int) control.getColor().getHexColor());
 	}
 

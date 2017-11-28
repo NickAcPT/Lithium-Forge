@@ -96,7 +96,7 @@ public class NewLithiumGUI extends GuiScreen {
         int parentWidth = sr.getScaledWidth();
         int parentHeight = sr.getScaledHeight();
 
-        int newX = c.getLocation().getX();
+        int newX = parentLoc.getX()+c.getLocation().getX();
         int newY = parentLoc.getY() + c.getLocation().getY();
 
         int sizeW = c instanceof LPanel ? ((LPanel) c).getTotalWidth() : c.getSize().getWidth();

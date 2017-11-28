@@ -28,6 +28,8 @@ package net.nickac.lithium.frontend.mod.ui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LImage;
 import net.nickac.lithium.backend.controls.impl.LOverlay;
@@ -44,6 +46,8 @@ import net.nickac.lithium.frontend.mod.ui.renders.TextLabelRenderer;
  * Created by NickAc for Lithium!
  */
 public class LithiumOverlay extends GuiScreen {
+
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void renderOverlay(RenderGameOverlayEvent event) {
 		if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
