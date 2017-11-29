@@ -35,9 +35,12 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.network.packethandler.abstracts.PacketOut;
 
 /**
  * Created by NickAc for Lithium!
@@ -50,23 +53,27 @@ public class ModCoderPackUtils {
 	 *
 	 * @return A new scaled resolution object
 	 */
+	@SideOnly(Side.CLIENT)
 	public static ScaledResolution getScaledResolution() {
 		return new ScaledResolution(getMinecraft());
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static Minecraft getMinecraft() {
 		return Minecraft.getMinecraft();
 	}
 
 
+	@SideOnly(Side.CLIENT)
 	public static FontRenderer getFontRenderer() {
 		return getMinecraft().fontRenderer;
 	}
 
-	public static void sendLithiumMessageToServer(LithiumMessage m) {
-		LithiumMod.getSimpleNetworkWrapper().sendToServer(m);
+	public static void sendLithiumMessageToServer(PacketOut m) {
+		LithiumMod.getSimpleNetworkWrapper().sendToServer(new LithiumMessage(String.join("|",m.execute())));
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static GuiScreen getCurrentScreen() {
 		return getMinecraft().currentScreen;
 	}
@@ -75,6 +82,7 @@ public class ModCoderPackUtils {
 		return new ResourceLocation("textures/gui/widgets.png");
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static Point convertPointToScaled(Point original) {
 		int originalWidth = getDisplayWidth();
 		int originalHeight = getDisplayHeight();
@@ -99,28 +107,29 @@ public class ModCoderPackUtils {
 		);
 
 	}
-
+    @SideOnly(Side.CLIENT)
 	public static SoundHandler getSoundHandler() {
 		return getMinecraft().getSoundHandler();
 	}
 
+    @SideOnly(Side.CLIENT)
 	public static void playButtonPressSound()
 	{
 		getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 	}
-
+    @SideOnly(Side.CLIENT)
 	public static int getDisplayHeight() {
 		return getMinecraft().displayHeight;
 	}
-
+    @SideOnly(Side.CLIENT)
 	public static int getDisplayWidth() {
 		return getMinecraft().displayWidth;
 	}
-
+    @SideOnly(Side.CLIENT)
 	public static TextureManager getTextureManager() {
 		return getMinecraft().getTextureManager();
 	}
-
+    @SideOnly(Side.CLIENT)
 	public static Tessellator getTesselator() {
 		return Tessellator.getInstance();
 	}

@@ -29,7 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.nickac.lithium.frontend.mod.LithiumMod;
-import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.network.packethandler.out.ServerConnectionEstablished;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
 
@@ -44,7 +44,7 @@ public class EntityEventHandler {
 		//After Joining, we need to clear the stuff because we are nice!
 		LithiumMod.setCurrentLithiumOverlay(null);
 		LithiumMod.getWindowManager().clear();
-		ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage("Lithium|OK"));
+		ModCoderPackUtils.sendLithiumMessageToServer(new ServerConnectionEstablished());
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 }

@@ -1,8 +1,7 @@
-
-
 buildscript {
     repositories {
         jcenter()
+
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
@@ -12,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-version = "1.1-BETA"
+version = "1.3-BETA"
 group = "net.nickac.lithium" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "lithium"
 
@@ -22,7 +21,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.1-14.22.1.2478"
+    version = "1.12.2-14.23.1.2555"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -34,8 +33,21 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+repositories{
+    mavenLocal()
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+
 dependencies {
-    compile project(':Backend')
+
+
+    shade group:"net.nickac.lithium", name: "Backend", version: "1.3"
+
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -77,5 +89,14 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+            // you may exclude other things here if you want, or maybe copy the META-INF
+        }
     }
 }

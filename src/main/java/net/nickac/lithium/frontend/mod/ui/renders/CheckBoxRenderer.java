@@ -26,12 +26,15 @@
 package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.impl.LCheckBox;
 import net.nickac.lithium.backend.other.LithiumConstants;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.objects.Rectangle;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.network.packethandler.out.ToggleAction;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
 
@@ -43,6 +46,7 @@ public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiS
 	private final int PADDING = 4;
 	private final int PADDING_LEFT = 3;
 
+	@SideOnly(Side.CLIENT)
 	private Rectangle getCheckBoxRect(LCheckBox c) {
 		Point loc = NewLithiumGUI.centerControl(c);
 
@@ -52,6 +56,7 @@ public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiS
 		return new Rectangle(left + PADDING_LEFT, top + PADDING, sz, sz);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderLithiumControl(LCheckBox control, GuiScreen gui) {
 		//Get the outer most rectangle
@@ -73,13 +78,14 @@ public class CheckBoxRenderer implements ILithiumControlRenderer<LCheckBox, GuiS
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void mouseClick(LCheckBox control, GuiScreen gui, int mouseX, int mouseY, int mouseButton) {
 		Rectangle rect = getCheckBoxRect(control).inflate(-1, -1);
 		if (rect.contains(new Point(mouseX, mouseY))) {
 			control.setChecked(!control.isChecked());
 			//Here, we risk having a desync from the server, but I'll try my best to sync it.
-			ModCoderPackUtils.sendLithiumMessageToServer(new LithiumMessage(LithiumConstants.LITHIUM_TOGGLE_ACTION + control.getUUID()));
+			ModCoderPackUtils.sendLithiumMessageToServer(new ToggleAction(control));
 		}
 	}
 

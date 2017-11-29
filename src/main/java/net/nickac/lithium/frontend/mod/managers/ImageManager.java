@@ -1,6 +1,8 @@
 package net.nickac.lithium.frontend.mod.managers;
 
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.impl.LImage;
 import net.nickac.lithium.frontend.mod.LithiumMod;
 import net.nickac.lithium.frontend.mod.utils.NickHashMap;
@@ -29,6 +31,7 @@ public class ImageManager {
 		return handledControls.contains(img.getUUID());
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void handleImage(LImage img) {
 		if (isImageHandled(img)) {
 			return;

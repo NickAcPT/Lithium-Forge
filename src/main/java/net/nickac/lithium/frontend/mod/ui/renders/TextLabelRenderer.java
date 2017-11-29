@@ -26,6 +26,8 @@
 package net.nickac.lithium.frontend.mod.ui.renders;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.impl.LTextLabel;
 import net.nickac.lithium.backend.other.objects.Point;
 import net.nickac.lithium.backend.other.rendering.ILithiumControlRenderer;
@@ -37,10 +39,12 @@ import net.nickac.lithium.frontend.mod.utils.ModCoderPackUtils;
  */
 public class TextLabelRenderer implements ILithiumControlRenderer<LTextLabel, GuiScreen> {
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderLithiumControl(LTextLabel control, GuiScreen gui) {
 		Point loc = NewLithiumGUI.centerControl(control);
 		//Render text on screen
+
 		gui.drawString(ModCoderPackUtils.getFontRenderer(), control.getText(), loc.getX(), loc.getY(), (int) control.getColor().getHexColor());
 	}
 

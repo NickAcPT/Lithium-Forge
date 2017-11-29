@@ -34,12 +34,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.nickac.lithium.backend.controls.LContainer;
 import net.nickac.lithium.backend.controls.LControl;
 import net.nickac.lithium.backend.controls.impl.LOverlay;
 import net.nickac.lithium.frontend.mod.events.NetworkEventHandler;
 import net.nickac.lithium.frontend.mod.managers.LithiumWindowManager;
+import net.nickac.lithium.frontend.mod.network.Handle;
 import net.nickac.lithium.frontend.mod.network.LithiumMessage;
+import net.nickac.lithium.frontend.mod.network.packethandler.abstracts.PacketHandlerImpl;
 import net.nickac.lithium.frontend.mod.ui.LithiumOverlay;
 import net.nickac.lithium.frontend.mod.ui.NewLithiumGUI;
 
@@ -87,6 +90,7 @@ public class LithiumMod {
 		LithiumMod.windowManager = windowManager;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public static void replaceControl(LContainer cc, UUID u, LControl c) {
 		for (LControl control : cc.getControls()) {
 			if (control instanceof LContainer) {
@@ -118,12 +122,15 @@ public class LithiumMod {
 
 	}
 
+	@SideOnly(Side.CLIENT)
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		overlayRenderer = new LithiumOverlay();
 		MinecraftForge.EVENT_BUS.register(NetworkEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(overlayRenderer);
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(LithiumMod.CHANNELNAME);
-		getSimpleNetworkWrapper().registerMessage(LithiumMessage.Handle.class, LithiumMessage.class, 0, Side.CLIENT);
+		Handle.setPacketHandler(new PacketHandlerImpl());
+		getSimpleNetworkWrapper().registerMessage(Handle.class, LithiumMessage.class, 0, Side.CLIENT);
+
 	}
 }
